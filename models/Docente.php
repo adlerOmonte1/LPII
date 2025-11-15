@@ -56,11 +56,11 @@ class Docente{
             echo "Ocurrio un error con".$e->getMessage();
         }
     }
-    public function eliminar($codDocente){
+    public function eliminar($codigoDocente){
         try{
-            $sql = "DELETE FROM docentes WHERE codDocente = :codDocente";
+            $sql = "DELETE FROM docentes WHERE codigoDocente = :codigoDocente";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam(":codDocente",$codDocente);
+            $stmt->bindParam(":codigoDocente",$codigoDocente);
             $stmt->execute();
             if($stmt->rowCount()>0){
                 echo "Se llego a eliminar";
@@ -72,8 +72,5 @@ class Docente{
             echo "Ocurrio un error".$e->getMessage();
         }
     }
-
-
-
 
 }
