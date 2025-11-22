@@ -10,10 +10,10 @@ class Docente{
     }
     public function listar(){
         try{
-            $sql = "SELECT * FROM Docente"; 
+            $sql = "SELECT * FROM Docente do JOIN usuario us on us.idUsuario=do.idusuario"; 
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
-            $docentes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return  $stmt->fetchAll(PDO::FETCH_ASSOC);
             // VARIABLE "DOCENTES"
 
         }catch(Exception $e){
@@ -21,53 +21,67 @@ class Docente{
         }
     }
 
-    public function crear($codigoDocente, $especialidad){
+    public function crear($nombres,$apellidos,$email,$contraseña, $especialidad){
         try{
-            $sql = "INSERT INTO docentes(codigoDocente,especialidad) VALUES (:codigoDocente,:especialidad)";
-            $stmt = $this->conn->prepare($sql);
-
-            $stmt->bindParam(":codigoDocente",$codigoDocente);
-            $stmt->bindParam(":especialidad",$especialidad);
-
-            if($stmt->rowCount() >0 ){
-                echo "Si se llego a ejecutar";
-            }else{
-                echo "No se llego a ejecutar";
-            }
-
+            #$perfil="docente";
+            #$this->conn->DB::beginTransaction();
+            $sqlUsuario ="INSERT INTO usuario(nombres,apellidos,email,contraseña,perfil) values (?,?,?,?,?)";
+            $stmtUsuario = $this->conn->prepare($sqlUsuario);
+            $passHash = password_hash($contraseña, PASSWORD_BCRYPT);
+            $stmtUsuario->execute(
+                [$nombres,$apellidos,$email,$passHash,'Docente']
+            );
+            $idUsuarioCreado = $this->conn->lastInsertId();#captura del id del user creado
+            $sqlDocente = "INSERT INTO docente(idUsuario,especialidad) values (?,?)";
+            $stmtDocente= $this->conn->prepare($sqlDocente);
+            $stmtDocente->execute(
+                [$idUsuarioCreado,$especialidad]
+            );
+            return true;
         }catch(Exception $e){
             echo "Ocurro un error".$e->getMessage();
         }
     }
 
-    public function actualizar($id,$especialidad){
+    public function actualizar($idUsuario,$nombres,$apellidos,$email,$especialidad){
         try{
-            $sql = "UPDATE docentes SET especialidad = :especialidad where codigoDocente =:id";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam(":id",$id);
-            $stmt->bindParam(":especialidad",$especialidad);
+            #$this->conn->DB::beginTransaction();
+            $sqlUsuario = "UPDATE usuario set nombres = ?, apellidos = ?, email = ? where idUsuario=?";
+            $stmtUsuario = $this->conn->prepare($sqlUsuario);
+            $stmtUsuario->execute([
+                $nombres,$apellidos,$email,$idUsuario
+            ]);
 
-            if($stmt->rowCount() >0 ){
-                echo "Si se llego a actualizar";
-            } else{
-                echo "No se llego a actualizar";
-            }
+            $sqlDocente = "UPDATE docente SET especialidad = ? where idUsuario =?";
+            $stmtDocente = $this->conn->prepare($sqlDocente);
+            $stmtDocente->execute([
+                $especialidad,$idUsuario
+            ]);
+            return true;      
         }catch(Exception $e){
             echo "Ocurrio un error con".$e->getMessage();
         }
     }
-    public function eliminar($codigoDocente){
-        try{
-            $sql = "DELETE FROM docentes WHERE codigoDocente = :codigoDocente";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam(":codigoDocente",$codigoDocente);
-            $stmt->execute();
-            if($stmt->rowCount()>0){
-                echo "Se llego a eliminar";
-            }else {
-                echo "No se llego a eliminar";
-            }
+    public function obtenerPorId($idUsuario){
+        $sql = "SELECT us.idUsuario, nombres, apellidos, email, codigoDocente, especialidad FROM docente do JOIN
+        usuario us ON us.idUsuario=do.idUsuario where us.idUsuario=? ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(
+            [$idUsuario]
+        );
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    }
 
+    public function eliminar($idUsuario){
+        try{
+        $sqlDocente = "DELETE FROM docente WHERE idUsuario = ?";
+        $stmtDocente = $this->conn->prepare($sqlDocente);
+        $stmtDocente->execute([$idUsuario]);
+
+        $sqlUsuario = "DELETE FROM usuario WHERE idUsuario = ?";
+        $stmtUsuario = $this->conn->prepare($sqlUsuario);
+        $stmtUsuario->execute([$idUsuario]);
+        return true;
         }catch(Exception $e){
             echo "Ocurrio un error".$e->getMessage();
         }
