@@ -6,40 +6,43 @@ $matricula = new Matricula();
 
 $action = $_POST['action'] ?? ($_GET['action'] ?? '');
 
-switch ($action) {
+if ($action == 'crear') {
 
-    case 'crear':
-        $fechaMatricula = $_POST['fechaMatricula'];
-        $estado = $_POST['estado'];
-        $idCurso = $_POST['idCurso'];
-        $codigoEstudiante = $_POST['codigoEstudiante'];
+    $matricula->crear(
+        fechaMatricula: $_POST["fechaMatricula"],
+        estado: $_POST["estado"],
+        idCurso: $_POST["idCurso"],
+        codigoEstudiante: $_POST["codigoEstudiante"]
+    );
 
-        $matricula->crear($fechaMatricula, $estado, $idCurso, $codigoEstudiante);
+    echo '<br><br><a href="../views/matricula/listar.php">Volver a la lista</a>';
 
-        header("Location: ../views/matricula/listar.php");
-        break;
-
-    case 'actualizar':
-        $idMatricula = $_POST['idMatricula'];
-        $fechaMatricula = $_POST['fechaMatricula'];
-        $estado = $_POST['estado'];
-        $idCurso = $_POST['idCurso'];
-        $codigoEstudiante = $_POST['codigoEstudiante'];
-
-        $matricula->actualizar($idMatricula, $fechaMatricula, $estado, $idCurso, $codigoEstudiante);
-
-        header("Location: ../views/matricula/listar.php");
-        break;
-
-    case 'eliminar':
-        $id = $_GET['id'];
-
-        $matricula->eliminar($id);
-
-        header("Location: ../views/matricula/listar.php");
-        break;
-
-    default:
-        echo "Accion no válida.";
-        break;
 }
+
+elseif ($action == 'actualizar') {
+
+    $matricula->actualizar(
+        idMatricula: $_POST["idMatricula"],
+        fechaMatricula: $_POST["fechaMatricula"],
+        estado: $_POST["estado"],
+        idCurso: $_POST["idCurso"],
+        codigoEstudiante: $_POST["codigoEstudiante"]
+    );
+
+    echo '<br><br><a href="../views/matricula/listar.php">Volver a la lista</a>';
+
+}
+
+elseif ($action == 'eliminar') {
+
+    $matricula->eliminar($_GET["id"]);
+
+    echo '<br><br><a href="../views/matricula/listar.php">Volver a la lista</a>';
+
+}
+
+else {
+    header("Location: ../views/matricula/listar.php");
+    exit;
+}
+

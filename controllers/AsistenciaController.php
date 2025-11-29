@@ -9,35 +9,39 @@ $action = $_POST['action'] ?? ($_GET['action'] ?? '');
 switch ($action) {
 
     case 'crear':
-        $fecha = $_POST['fecha'];
-        $estado = $_POST['estado'];
-        $idMatricula = $_POST['idMatricula'];
 
-        $asistencia->crear($fecha, $estado, $idMatricula);
+        $asistencia->crear(
+            fecha: $_POST["fecha"],
+            estado: $_POST["estado"],
+            idMatricula: $_POST["idMatricula"]
+        );
 
-        header("Location: ../views/asistencia/listar.php");
+        echo '<br><br><a href="../views/asistencia/listar.php">Volver a la lista</a>';
         break;
+
 
     case 'actualizar':
-        $idAsistencia = $_POST['idAsistencia'];
-        $fecha = $_POST['fecha'];
-        $estado = $_POST['estado'];
-        $idMatricula = $_POST['idMatricula'];
 
-        $asistencia->actualizar($idAsistencia, $fecha, $estado, $idMatricula);
+        $asistencia->actualizar(
+            idAsistencia: $_POST["idAsistencia"],
+            fecha: $_POST["fecha"],
+            estado: $_POST["estado"],
+            idMatricula: $_POST["idMatricula"]
+        );
 
-        header("Location: ../views/asistencia/listar.php");
+        echo '<br><br><a href="../views/asistencia/listar.php">Volver a la lista</a>';
         break;
+
 
     case 'eliminar':
-        $id = $_GET['id'];
 
-        $asistencia->eliminar($id);
+        $asistencia->eliminar($_GET["id"]);
 
-        header("Location: ../views/asistencia/listar.php");
+        echo '<br><br><a href="../views/asistencia/listar.php">Volver a la lista</a>';
         break;
+
 
     default:
-        echo "Accion no válida.";
-        break;
+        header("Location: ../views/asistencia/listar.php");
+        exit;
 }
