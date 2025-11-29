@@ -13,7 +13,7 @@ class Docente{
             $sql = "SELECT * FROM Docente do JOIN usuario us on us.idUsuario=do.idusuario"; 
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
-            return  $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return  $stmt->fetchAll(PDO::FETCH_OBJ); //CAMBIANDO DEL ASsoc para que de el buscador
             // VARIABLE "DOCENTES"
 
         }catch(Exception $e){
@@ -82,6 +82,25 @@ class Docente{
         $stmtUsuario = $this->conn->prepare($sqlUsuario);
         $stmtUsuario->execute([$idUsuario]);
         return true;
+        }catch(Exception $e){
+            echo "Ocurrio un error".$e->getMessage();
+        }
+    }
+    public function buscar($texto){
+        try{
+            $sql="SELECT u.idUsuario, u.nombres, u.apellidos, u.email, d.especialidad 
+                    FROM Docente d 
+                    INNER JOIN Usuario u ON d.idUsuario = u.idUsuario 
+                    WHERE u.nombres LIKE ? 
+                       OR u.apellidos LIKE ? 
+                       OR d.especialidad LIKE ?";
+            $stmt= $this->conn->prepare($sql);
+            $parametro = "%".$texto."%";
+            $stmt->execute(
+                [$parametro,$parametro,$parametro]
+            );
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+
         }catch(Exception $e){
             echo "Ocurrio un error".$e->getMessage();
         }
