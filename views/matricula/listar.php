@@ -1,55 +1,90 @@
 <?php
-require_once '../../models/Matricula.php';
-$matricula = new Matricula();
-$resultado = $matricula->listar();
+require_once "../../controllers/MatriculaController.php";
+$controller = new MatriculaController();
+$lista = $controller->listar();
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Lista de Matrículas</title>
-    <link rel="stylesheet" href="../../css/styles.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        body { background-color: #f8f9fa; }
+        .title-bar {
+            background: linear-gradient(45deg, #0d6efd, #0a58ca);
+            color: white;
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>Gestión de Matriculas</h2>
-<a href="crear.php">Añadir Nueva Matricula</a>
-<br><br>
+<div class="container mt-5">
+    <div class="card shadow">
 
-<table border="1px" width="80%">
-    <tr>
-        <th>ID</th>
-        <th>Fecha</th>
-        <th>Estado</th>
-        <th>ID Curso</th>
-        <th>Código Estudiante</th>
-        <th>Acciones</th>
-    </tr>
+        <div class="card-header title-bar py-3">
+            <h4 class="text-center mb-0">
+                <i class="bi bi-table me-2"></i>Lista de Matrículas Registradas
+            </h4>
+        </div>
 
-    <?php
-    if ($resultado) {
-        foreach ($resultado as $fila) {
-    ?>
-    <tr>
-        <td><?php echo $fila["idMatricula"]; ?></td>
-        <td><?php echo $fila["fechaMatricula"]; ?></td>
-        <td><?php echo $fila["estado"]; ?></td>
-        <td><?php echo $fila["idCurso"]; ?></td>
-        <td><?php echo $fila["codigoEstudiante"]; ?></td>
+        <div class="card-body p-4">
 
-        <td>
-            <a href="../../controllers/MatriculaController.php?action=eliminar&id=<?php echo $fila['idMatricula']; ?>"
-               onclick="return confirm('¿Eliminar matricula?');">
-                Eliminar
-            </a>
-        </td>
-    </tr>
-    <?php
-        }
-    }
-    ?>
+            <div class="mb-3 text-end">
+                <a href="crear.php" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i> Nueva Matrícula
+                </a>
+            </div>
 
-</table>
+            <table class="table table-hover table-striped align-middle text-center">
+                <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha Registro</th>
+                    <th>ID Estudiante</th>
+                    <th>ID Curso</th>
+                    <th>Turno</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
 
+                <tbody>
+                <?php foreach ($lista as $fila): ?>
+                    <tr>
+                        <td><?= $fila['idMatricula'] ?></td>
+                        <td><?= $fila['fechaRegistro'] ?></td>
+                        <td><?= $fila['idEstudiante'] ?></td>
+                        <td><?= $fila['idCurso'] ?></td>
+                        <td>
+                            <span class="badge bg-info text-dark"><?= $fila['turno'] ?></span>
+                        </td>
+                        <td>
+                            <a href="editar.php?id=<?= $fila['idMatricula'] ?>" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+
+                            <a href="../../controllers/MatriculaController.php?action=eliminar&id=<?= $fila['idMatricula'] ?>"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('¿Seguro de eliminar este registro?');">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
