@@ -1,50 +1,83 @@
 <?php
-
 require_once '../../models/Idioma.php';
-
 
 $idioma = new Idioma();
 $resultado = $idioma->listar();
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Lista de Idiomas</title>
-    <link rel="stylesheet" href="../../css/styles.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        body { background-color: #f8f9fa; }
+        .title-box {
+            background-color: #e9ecef;
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
+
 <body>
-    <h2>Gestión de Idiomas</h2>
-    <a href="crear.php">Añadir Nuevo Idioma</a>
-    <br><br>
 
-    <table border="1px" width="60%">
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Acciones</th>
-        </tr>
+<div class="container mt-5">
 
-        <?php
-        if ($resultado) {
-            foreach ($resultado as $idioma) {
-        ?>
+    <h2>
+        <span class="title-box">Listado de Idiomas</span>
+    </h2>
+
+    <a href="crear.php" class="btn btn-primary mb-3">
+        Añadir Nuevo Idioma
+    </a>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th style="width: 160px;">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            <?php
+            if ($resultado) {
+                foreach ($resultado as $idioma) {
+            ?>
                 <tr>
                     <td><?php echo $idioma["idIdioma"]; ?></td>
                     <td><?php echo $idioma["nombre"]; ?></td>
+
                     <td>
-                        <a href="../../controllers/idiomaController.php?action=eliminar&id=<?php echo $idioma['idIdioma']; ?>"
+                        <a href="../../controllers/IdiomaController.php?action=eliminar&id=<?php echo $idioma['idIdioma']; ?>"
+                           class="btn btn-danger btn-sm"
                            onclick="return confirm('¿Estás seguro de eliminar este idioma?');">
                             Eliminar
                         </a>
                     </td>
                 </tr>
-        <?php
+            <?php
+                }
             }
-        }
-        ?>
-    </table>
+            ?>
+            </tbody>
 
+        </table>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

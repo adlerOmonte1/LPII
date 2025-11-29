@@ -11,7 +11,7 @@ class Curso {
         $this->conn = $conexion->iniciar();
     }
 
-    // LISTAR
+
     public function listar() {
         try {
             $sql = "SELECT * FROM Curso ORDER BY nombre ASC";
@@ -23,7 +23,7 @@ class Curso {
         return [];
     }
 
-    // CREAR
+ 
     public function crear($nombre, $cupoMaximo, $fechaInicio, $fechaFin, $idNivel, $idIdioma, $idAula, $codigoDocente) {
         try {
             $sql = "INSERT INTO Curso (nombre, cupoMaximo, fechaInicio, fechaFin, idNivel, idIdioma, idAula, codigoDocente)
@@ -47,7 +47,7 @@ class Curso {
         }
     }
 
-    // ACTUALIZAR
+
     public function actualizar($idCurso, $nombre, $cupoMaximo, $fechaInicio, $fechaFin, $idNivel, $idIdioma, $idAula, $codigoDocente) {
         try {
             $sql = "UPDATE Curso SET nombre=:nombre, cupoMaximo=:cupoMaximo, fechaInicio=:fechaInicio, fechaFin=:fechaFin,
@@ -78,7 +78,7 @@ class Curso {
         }
     }
 
-    // ELIMINAR
+
     public function eliminar($idCurso) {
         try {
             $sql = "DELETE FROM Curso WHERE idCurso = :idCurso";
