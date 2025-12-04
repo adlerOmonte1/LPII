@@ -38,7 +38,7 @@ class Estudiante {
     public function listar() {
         $sql = "SELECT e.codigoEstudiante, u.nombres, u.apellidos, u.email 
                 FROM Estudiante e 
-                INNER INNER JOIN Usuario u ON e.idUsuario = u.idUsuario";
+                INNER JOIN Usuario u ON e.idUsuario = u.idUsuario";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
