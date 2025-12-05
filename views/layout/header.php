@@ -1,9 +1,6 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['email'])) {
-    header("Location: ../login/login.php");
-    exit();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 ?>
 <!DOCTYPE html>
@@ -15,15 +12,17 @@ if (!isset($_SESSION['email'])) {
 
     <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- ICONOS BOOTSTRAP -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- ===================== NAVBAR BOOTSTRAP ===================== -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container">
 
@@ -37,31 +36,34 @@ if (!isset($_SESSION['email'])) {
 
         <div class="collapse navbar-collapse" id="navbarNav">
 
-            <!-- ⭐ MENÚ CENTRADO ⭐ -->
             <ul class="navbar-nav mx-auto">
 
+                <!-- MENU COMÚN -->
                 <li class="nav-item"><a class="nav-link" href="../curso/listar.php">Cursos</a></li>
                 <li class="nav-item"><a class="nav-link" href="../docente/listar.php">Docentes</a></li>
-                <li class="nav-item"><a class="nav-link" href="../estudiante/listar.php">Estudiantes</a></li>
-                <li class="nav-item"><a class="nav-link" href="../horario/listar.php">Horarios</a></li>
-                <li class="nav-item"><a class="nav-link" href="../idioma/listar.php">Idiomas</a></li>
-                <li class="nav-item"><a class="nav-link" href="../matricula/listar.php">Matrículas</a></li>
-                <li class="nav-item"><a class="nav-link" href="../nivel/listar.php">Niveles</a></li>
+                <li class="nav-item"><a class="nav-link" href="../horario/listar.php">Horario</a></li>
+
+                <!-- SOLO ADMIN -->
+                <?php if ($_SESSION["perfil"] === "administrador"): ?>
+                    <li class="nav-item"><a class="nav-link" href="../estudiante/listar.php">Estudiantes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../idioma/listar.php">Idiomas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../matricula/listar.php">Matrículas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../nivel/listar.php">Niveles</a></li>
+                <?php endif; ?>
 
             </ul>
 
-            <!-- USUARIO + CERRAR SESIÓN -->
             <div class="d-flex align-items-center">
-
                 <span class="text-light small me-3">
-                    <strong><?= $_SESSION['nombres'] ?></strong> | <?= $_SESSION['perfil'] ?>
+                    <strong><?= $_SESSION['nombres'] ?></strong> (<?= $_SESSION['perfil'] ?>)
                 </span>
 
                 <a href="../../controllers/logout.php" class="btn btn-outline-danger btn-sm">
                     Cerrar sesión
                 </a>
-
             </div>
+
         </div>
+
     </div>
 </nav>
