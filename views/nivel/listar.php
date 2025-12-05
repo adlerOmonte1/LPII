@@ -1,49 +1,57 @@
 <?php
-
 require_once '../../models/Nivel.php';
-
 $nivel = new Nivel();
-$resultado = $nivel->listar();
-
+$niveles = $nivel->listar();
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Niveles</title>
-    <link rel="stylesheet" href="../../css/styles.css">
+    <title>Niveles</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h2>Gestión de Niveles</h2>
-    <a href="crear.php">Añadir Nuevo Nivel</a>
-    <br><br>
 
-    <table border="1px" width="60%">
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Acciones</th>
-        </tr>
+<?php require_once("../layout/header.php"); ?>
 
-        <?php
-        if ($resultado) {
-            foreach ($resultado as $item) {
-        ?>
-                <tr>
-                    <td><?php echo $item["idNivel"]; ?></td>
-                    <td><?php echo $item["nombre"]; ?></td>
-                    <td>
-                        <a href="../../controllers/NivelController.php?action=eliminar&id=<?php echo $item['idNivel']; ?>"
-                           onclick="return confirm('¿Seguro de eliminar este nivel?');">
-                            Eliminar
-                        </a>
-                    </td>
-                </tr>
-        <?php
-            }
-        }
-        ?>
+<div class="container mt-5">
+
+    <h2><span class="badge bg-secondary p-3">Listado de Niveles</span></h2>
+
+    <a href="crear.php" class="btn btn-primary mb-3">
+        <i class="bi bi-plus-circle"></i> Añadir Nivel
+    </a>
+
+    <table class="table table-bordered table-striped mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th style="width:150px;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($niveles as $n): ?>
+            <tr>
+                <td><?= $n["idNivel"]; ?></td>
+                <td><?= $n["nombre"]; ?></td>
+                <td>
+                    <a href="editar.php?id=<?= $n['idNivel']; ?>" class="btn btn-warning btn-sm">
+                        Editar
+                    </a>
+                    <a href="../../controllers/NivelController.php?action=eliminar&id=<?= $n['idNivel']; ?>"
+                       onclick="return confirm('¿Eliminar nivel?');"
+                       class="btn btn-danger btn-sm">
+                        Eliminar
+                    </a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
     </table>
+
+</div>
 
 </body>
 </html>
