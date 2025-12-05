@@ -2,6 +2,12 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// 🚨 Protección global: si no hay sesión, manda a login
+if (!isset($_SESSION['email'])) {
+    header("Location: ../login/login.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
