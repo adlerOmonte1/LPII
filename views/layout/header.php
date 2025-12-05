@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['email'])) {
-    header("Location: login.php");
+    header("Location: ../login/login.php");
     exit();
 }
 ?>
@@ -16,6 +16,9 @@ if (!isset($_SESSION['email'])) {
     <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- ICONOS BOOTSTRAP -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 
 <body>
@@ -59,11 +62,6 @@ if (!isset($_SESSION['email'])) {
                 </a>
 
             </div>
-
         </div>
     </div>
 </nav>
-
-
-</body>
-</html>
