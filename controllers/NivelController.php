@@ -8,29 +8,43 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 if ($action == 'crear') {
 
-    $nombre = $_POST["nombre"];
-    $nivel->crear($nombre);
+    $resultado = $nivel->crear($_POST["nombre"]);
 
-    echo '<br><br><a href="../views/nivel/listar.php">Volver a la lista</a>';
+    if ($resultado) {
+        header("Location: ../views/nivel/listar.php");
+        exit;
+    } else {
+        echo "Error al registrar nivel";
+    }
 
 }
 
 elseif ($action == 'actualizar') {
 
-    $id = $_POST["idNivel"];
-    $nombre = $_POST["nombre"];
-    $nivel->actualizar($id, $nombre);
+    $resultado = $nivel->actualizar(
+        idNivel: $_POST["idNivel"],
+        nombre: $_POST["nombre"]
+    );
 
-    echo '<br><br><a href="../views/nivel/listar.php">Volver a la lista</a>';
+    if ($resultado) {
+        header("Location: ../views/nivel/listar.php");
+        exit;
+    } else {
+        echo "Error al actualizar nivel";
+    }
 
 }
 
 elseif ($action == 'eliminar') {
 
-    $id = $_GET["id"];
-    $nivel->eliminar($id);
+    $resultado = $nivel->eliminar($_GET["id"]);
 
-    echo '<br><br><a href="../views/nivel/listar.php">Volver a la lista</a>';
+    if ($resultado) {
+        header("Location: ../views/nivel/listar.php");
+        exit;
+    } else {
+        echo "Error al eliminar nivel";
+    }
 
 }
 
