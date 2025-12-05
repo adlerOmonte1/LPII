@@ -1,27 +1,27 @@
 <?php
-
-require_once __DIR__ . '/../models/Matricula.php';
+require_once '../models/Matricula.php';
 
 $matricula = new Matricula();
 
-$action = $_POST['action'] ?? ($_GET['action'] ?? '');
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 if ($action == 'crear') {
-
-    $matricula->crear(
+    $resultado = $matricula->crear(
         fechaMatricula: $_POST["fechaMatricula"],
         estado: $_POST["estado"],
         idCurso: $_POST["idCurso"],
         codigoEstudiante: $_POST["codigoEstudiante"]
     );
 
-    echo '<br><br><a href="../views/matricula/listar.php">Volver a la lista</a>';
-
+    if($resultado){
+        header("Location: ../views/matricula/listar.php");
+    } else {
+        echo "Error al registrar matrícula";
+    }
 }
 
 elseif ($action == 'actualizar') {
-
-    $matricula->actualizar(
+    $resultado = $matricula->actualizar(
         idMatricula: $_POST["idMatricula"],
         fechaMatricula: $_POST["fechaMatricula"],
         estado: $_POST["estado"],
@@ -29,20 +29,25 @@ elseif ($action == 'actualizar') {
         codigoEstudiante: $_POST["codigoEstudiante"]
     );
 
-    echo '<br><br><a href="../views/matricula/listar.php">Volver a la lista</a>';
-
+    if($resultado){
+        header("Location: ../views/matricula/listar.php");
+    } else {
+        echo "Error al actualizar matrícula";
+    }
 }
 
 elseif ($action == 'eliminar') {
+    $resultado = $matricula->eliminar($_GET["id"]);
 
-    $matricula->eliminar($_GET["id"]);
-
-    echo '<br><br><a href="../views/matricula/listar.php">Volver a la lista</a>';
-
+    if($resultado){
+        header("Location: ../views/matricula/listar.php");
+    } else {
+        echo "Error al eliminar matrícula";
+    }
 }
 
 else {
     header("Location: ../views/matricula/listar.php");
     exit;
 }
-
+?>
