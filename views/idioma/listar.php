@@ -28,7 +28,7 @@ $resultado = $idioma->listar();
 </head>
 
 <body>
-
+<?php require_once("../layout/header.php"); ?>
 <div class="container mt-5">
 
     <h2>

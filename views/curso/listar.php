@@ -34,7 +34,7 @@ if ($busqueda != "") {
 </head>
 
 <body>
-
+<?php require_once("../layout/header.php"); ?>
 <div class="container mt-5">
 <div class="row align-items-center mb-3">
     <div class="col-md-6">
