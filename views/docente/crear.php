@@ -20,6 +20,8 @@
 </head>
 
 <body>
+    <?php require_once("../layout/header.php");?>
+
     <div class="container mt-5 mb-5">
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-7"> <div class="card shadow-lg border-0 rounded-3"> 
