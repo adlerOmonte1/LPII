@@ -7,53 +7,77 @@ class Usuario {
 
     public function __construct() {
         $conexion = new Conexion();
-        $this->conn = $conexion->iniciar(); // GUARDAMOS PDO
+        $this->conn = $conexion->iniciar();
     }
+
 
     // ---------------------------------------------------
     // OBTENER USUARIO POR EMAIL
     // ---------------------------------------------------
     public function obtenerPorEmail($email) {
+        try {
+            $sql = "SELECT * FROM Usuario WHERE email = :email";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
 
-        $sql = "SELECT * FROM Usuario WHERE email = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(1, $email);
-        $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo "Error al obtener usuario: " . $e->getMessage();
+            return null;
+        }
     }
 
-    // ---------------------------------------------------
-    // REGISTRAR USUARIO CON PASSWORD HASHEADA
-    // ---------------------------------------------------
-    public function registrar($nombres, $apellidos, $email, $passwordHash, $perfil) {
 
+
+    // ---------------------------------------------------
+    // REGISTRAR USUARIO (PASSWORD HASHEADA)
+    // ---------------------------------------------------
+   public function registrar($nombres, $apellidos, $email, $passwordHash, $perfil) {
+    try {
         $sql = "INSERT INTO Usuario (nombres, apellidos, email, contraseña, perfil)
-                VALUES (?, ?, ?, ?, ?)";
+                VALUES (:nombres, :apellidos, :email, :password, :perfil)";
 
         $stmt = $this->conn->prepare($sql);
 
-        return $stmt->execute([$nombres, $apellidos, $email, $passwordHash, $perfil]);
-    }
-    // ---------------------------------------------------
-// LOGIN CON CORREO Y PASSWORD HASHEADA
-// ---------------------------------------------------
-   public function login($email, $password)
-{
-    $usuario = $this->obtenerPorEmail($email);
+        $stmt->bindParam(':nombres', $nombres);
+        $stmt->bindParam(':apellidos', $apellidos);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':password', $passwordHash);
+        $stmt->bindParam(':perfil', $perfil);
 
-    if (!$usuario) {
-        return false;
-    }
+        return $stmt->execute();  
 
-    // Contraseña hasheada
-    if (password_verify($password, $usuario['contraseña'])) {
-        return $usuario;
+    } catch (Exception $e) {
+        return false;              
     }
-
-    return false;
 }
 
 
+
+
+
+    // ---------------------------------------------------
+    // LOGIN CON VERIFICACIÓN HASH
+    // ---------------------------------------------------
+    public function login($email, $password) {
+        try {
+            $usuario = $this->obtenerPorEmail($email);
+            if (!$usuario) {
+                return false;
+            }
+
+            if (password_verify($password, $usuario['contraseña'])) {
+                return $usuario;
+            }
+
+            return false;
+
+        } catch (Exception $e) {
+            echo "Error en login: " . $e->getMessage();
+            return false;
+        }
+    }
 
 }
