@@ -34,11 +34,11 @@ $resultado = $idioma->listar();
     <h2>
         <span class="title-box">Listado de Idiomas</span>
     </h2>
-
+    <?php if ($_SESSION['perfil'] === 'administrador'): ?>
     <a href="crear.php" class="btn btn-primary mb-3">
         Añadir Nuevo Idioma
     </a>
-
+    <?php endif;?>
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
 
@@ -60,6 +60,7 @@ $resultado = $idioma->listar();
                     <td><?php echo $idioma["nombre"]; ?></td>
 
                     <td>
+                    <?php if ($_SESSION['perfil'] === 'administrador'): ?>
                         <a href="editar.php?id=<?php echo $idioma['idIdioma']; ?>" 
                             class="btn btn-warning btn-sm">
                             <i class="bi bi-pencil-square"></i> Editar
@@ -69,6 +70,9 @@ $resultado = $idioma->listar();
                            onclick="return confirm('¿Estás seguro de eliminar este idioma?');">
                             Eliminar
                         </a>
+                        <?php else: ?>
+                                <span class="badge bg-secondary">Solo lectura</span>
+                        <?php endif;?>
                     </td>
                 </tr>
             <?php

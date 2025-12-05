@@ -34,11 +34,11 @@ $resultado = $horario->listar();
     <h2>
         <span class="title-box">Listado de Horarios</span>
     </h2>
-
+    <?php if ($_SESSION['perfil'] === 'administrador'): ?>
     <a href="crear.php" class="btn btn-primary mb-3">
         Añadir Nuevo Horario
     </a>
-
+<?php endif;?>
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
 
@@ -64,6 +64,7 @@ $resultado = $horario->listar();
                     <td><?php echo $row["horaFin"]; ?></td>
 
                     <td>
+                        <?php if ($_SESSION['perfil'] === 'administrador'): ?>
                         <a href="editar.php?id=<?php echo $row['idHorario']; ?>" 
                             class="btn btn-warning btn-sm">
                             <i class="bi bi-pencil-square"></i> Editar
@@ -73,6 +74,9 @@ $resultado = $horario->listar();
                            onclick="return confirm('¿Estás seguro de eliminar este horario?');">
                             Eliminar
                         </a>
+                        <?php else: ?>
+                                <span class="badge bg-secondary">Solo lectura</span>
+                        <?php endif;?>
                     </td>
                 </tr>
             <?php

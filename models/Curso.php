@@ -69,6 +69,69 @@ class Curso {
             echo "Error al actualizar: " . $e->getMessage();
         }
     }
+   public function obtenerPorId($idCurso) {
+    try {
+
+        $sql = "SELECT c.*, 
+                       n.nombre AS nivel, 
+                       i.nombre AS idioma, 
+                       a.nombre AS aula,
+                       d.codigoDocente, 
+                       u.nombres AS nombreDocente,
+                       u.apellidos AS apellidoDocente
+                FROM Curso c
+                INNER JOIN Nivel n ON c.idNivel = n.idNivel
+                INNER JOIN Idioma i ON c.idIdioma = i.idIdioma
+                INNER JOIN Aula a ON c.idAula = a.idAula
+                INNER JOIN Docente d ON c.codigoDocente = d.codigoDocente
+                INNER JOIN Usuario u ON d.idUsuario = u.idUsuario
+                WHERE c.idCurso = :idCurso";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':idCurso', $idCurso);
+        $stmt->execute();
+
+        $curso = $stmt->fetch(PDO::FETCH_OBJ);
+
+        return $curso;
+
+    } catch (Exception $e) {
+        echo "Error al obtener curso: " . $e->getMessage();
+        return null;
+    }
+}
+
+    public function obtenerNiveles() {
+    $sql = "SELECT * FROM Nivel ORDER BY nombre ASC";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
+}
+
+public function obtenerIdiomas() {
+    $sql = "SELECT * FROM Idioma ORDER BY nombre ASC";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
+}
+
+public function obtenerAulas() {
+    $sql = "SELECT * FROM Aula ORDER BY nombre ASC";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
+}
+
+public function obtenerDocentes() {
+    $sql = "SELECT d.codigoDocente, u.nombres, u.apellidos
+            FROM Docente d
+            INNER JOIN Usuario u ON u.idUsuario = d.idUsuario
+            ORDER BY u.apellidos ASC";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
+}
+
 
 
     public function eliminar($idCurso) {

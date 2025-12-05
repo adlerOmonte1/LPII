@@ -18,11 +18,11 @@ $niveles = $nivel->listar();
 <div class="container mt-5">
 
     <h2><span class="badge bg-secondary p-3">Listado de Niveles</span></h2>
-
+    <?php if ($_SESSION['perfil'] === 'administrador'): ?>
     <a href="crear.php" class="btn btn-primary mb-3">
         <i class="bi bi-plus-circle"></i> Añadir Nivel
     </a>
-
+    <?php endif;?>
     <table class="table table-bordered table-striped mt-3">
         <thead class="table-dark">
             <tr>
@@ -37,6 +37,7 @@ $niveles = $nivel->listar();
                 <td><?= $n["idNivel"]; ?></td>
                 <td><?= $n["nombre"]; ?></td>
                 <td>
+                    <?php if ($_SESSION['perfil'] === 'administrador'): ?>
                     <a href="editar.php?id=<?= $n['idNivel']; ?>" class="btn btn-warning btn-sm">
                         Editar
                     </a>
@@ -45,6 +46,9 @@ $niveles = $nivel->listar();
                        class="btn btn-danger btn-sm">
                         Eliminar
                     </a>
+                    <?php else: ?>
+                                <span class="badge bg-secondary">Solo lectura</span>
+                    <?php endif;?>
                 </td>
             </tr>
             <?php endforeach; ?>

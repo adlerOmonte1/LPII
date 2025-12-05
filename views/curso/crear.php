@@ -1,18 +1,12 @@
-
 <?php
-require_once '../../config/conexion.php';
+require_once '../../models/Curso.php';
 
-$conexion = new Conexion();
-$conn = $conexion->iniciar();
-$niveles = $conn->query("SELECT * FROM Nivel ORDER BY nombre ASC")->fetchAll(PDO::FETCH_ASSOC);
-$idiomas = $conn->query("SELECT * FROM Idioma ORDER BY nombre ASC")->fetchAll(PDO::FETCH_ASSOC);
-$aulass = $conn->query("SELECT * FROM Aula ORDER BY nombre ASC")->fetchAll(PDO::FETCH_ASSOC);
-$docentes = $conn->query("
-    SELECT Docente.codigoDocente, Usuario.nombres, Usuario.apellidos
-    FROM Docente
-    INNER JOIN Usuario ON Usuario.idUsuario = Docente.idUsuario
-    ORDER BY Usuario.apellidos ASC
-")->fetchAll(PDO::FETCH_ASSOC);
+$cursoModel = new Curso();
+
+$niveles = $cursoModel->obtenerNiveles();
+$idiomas = $cursoModel->obtenerIdiomas();
+$aulas = $cursoModel->obtenerAulas();
+$docentes = $cursoModel->obtenerDocentes();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -81,52 +75,53 @@ $docentes = $conn->query("
 
                         <h5 class="text-primary mb-3 mt-4 border-bottom pb-2">Asignaciones</h5>
 
-<div class="mb-3">
-    <label class="form-label fw-bold">Nivel</label>
-    <select class="form-select" name="idNivel" required>
-        <option value="">Seleccione un nivel</option>
-        <?php foreach ($niveles as $n): ?>
-            <option value="<?= $n['idNivel']; ?>"><?= $n['nombre']; ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
+                        <!-- NIVEL -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nivel</label>
+                            <select class="form-select" name="idNivel" required>
+                                <option value="">Seleccione un nivel</option>
+                                <?php foreach ($niveles as $n): ?>
+                                    <option value="<?= $n->idNivel ?>"><?= $n->nombre ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
 
-<!-- IDIOMA -->
-<div class="mb-3">
-    <label class="form-label fw-bold">Idioma</label>
-    <select class="form-select" name="idIdioma" required>
-        <option value="">Seleccione un idioma</option>
-        <?php foreach ($idiomas as $i): ?>
-            <option value="<?= $i['idIdioma']; ?>"><?= $i['nombre']; ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
+                        <!-- IDIOMA -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Idioma</label>
+                            <select class="form-select" name="idIdioma" required>
+                                <option value="">Seleccione un idioma</option>
+                                <?php foreach ($idiomas as $i): ?>
+                                    <option value="<?= $i->idIdioma ?>"><?= $i->nombre ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
 
-<!-- AULA -->
-<div class="mb-3">
-    <label class="form-label fw-bold">Aula</label>
-    <select class="form-select" name="idAula" required>
-        <option value="">Seleccione un aula</option>
-        <?php foreach ($aulass as $a): ?>
-            <option value="<?= $a['idAula']; ?>">
-                <?= $a['nombre']; ?> — Capacidad: <?= $a['capacidad']; ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</div>
+                        <!-- AULA -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Aula</label>
+                            <select class="form-select" name="idAula" required>
+                                <option value="">Seleccione un aula</option>
+                                <?php foreach ($aulas as $a): ?>
+                                    <option value="<?= $a->idAula ?>">
+                                        <?= $a->nombre ?> — Capacidad: <?= $a->capacidad ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
 
-<!-- DOCENTE -->
-<div class="mb-4">
-    <label class="form-label fw-bold">Docente</label>
-    <select class="form-select" name="codigoDocente" required>
-        <option value="">Seleccione docente</option>
-        <?php foreach ($docentes as $d): ?>
-            <option value="<?= $d['codigoDocente']; ?>">
-                <?= $d['apellidos'] . ', ' . $d['nombres']; ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</div>
+                        <!-- DOCENTE -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Docente</label>
+                            <select class="form-select" name="codigoDocente" required>
+                                <option value="">Seleccione docente</option>
+                                <?php foreach ($docentes as $d): ?>
+                                    <option value="<?= $d->codigoDocente ?>">
+                                        <?= $d->apellidos ?>, <?= $d->nombres ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <a href="listar.php" class="btn btn-secondary me-md-2">
@@ -146,6 +141,5 @@ $docentes = $conn->query("
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

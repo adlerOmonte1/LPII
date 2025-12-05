@@ -41,10 +41,11 @@ if ($busqueda != "") {
         <h2>
             <span class="title-box">Listado de Cursos</span>
         </h2>
-
+    <?php if ($_SESSION['perfil'] === 'administrador'): ?>
         <a href="crear.php" class="btn btn-primary">
             <i class="bi bi-plus-circle me-1"></i> Añadir Nuevo Curso
         </a>
+    <?php endif;?>
     </div>
 
     <div class="col-md-6">
@@ -100,6 +101,7 @@ if ($busqueda != "") {
                     <td><?php echo $curso["fechaFin"]; ?></td>
 
                     <td>
+                        <?php if ($_SESSION['perfil'] === 'administrador'): ?>
                         <a href="editar.php?id=<?php echo $curso['idCurso']; ?>" 
                             class="btn btn-warning btn-sm">
                             <i class="bi bi-pencil-square"></i> Editar
@@ -109,6 +111,9 @@ if ($busqueda != "") {
                            onclick="return confirm('¿Estás seguro de eliminar este curso?');">
                             Eliminar
                         </a>
+                        <?php else: ?>
+                                <span class="badge bg-secondary">Solo lectura</span>
+                        <?php endif;?>
 
                     </td>
                 </tr>
