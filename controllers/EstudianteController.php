@@ -1,55 +1,71 @@
-<?php
-// Incluir modelo
+<?php 
 require_once '../models/Estudiante.php';
 
-class EstudianteController {
-    
-    public function guardar() {
-        $modelo = new Estudiante();
+$action = $_REQUEST['action'] ?? ''; 
+$estudiante = new Estudiante();
 
-        if (isset($_POST['codigo'])) {
-            // Editar
-            $exito = $modelo->actualizar(
-                $_POST['codigo'],
-                $_POST['nombres'],
-                $_POST['apellidos'],
-                $_POST['email']
-            );
-            $mensaje = $exito ? "Estudiante actualizado" : "Error al actualizar";
+// Ruta de redirección base
+$redirect = "../views/estudiante/listar.php";
+
+// ---------------------------
+// 1. CREAR ESTUDIANTE
+// ---------------------------
+if ($action == 'crear') {
+
+    $resultado = $estudiante->crear(
+        $nombres     = $_POST["nombres"],
+        $apellidos   = $_POST["apellidos"],
+        $email       = $_POST["email"],
+        $password    = $_POST["password"]
+    );
+
+    if ($resultado) {
+        header("Location: $redirect");
+        exit();
+    } else {
+        echo "Error al registrar estudiante";
+    }
+
+
+// ---------------------------
+// 2. ACTUALIZAR ESTUDIANTE
+// ---------------------------
+} elseif ($action == 'actualizar') {
+
+    $resultado = $estudiante->actualizar(
+        $codigo      = $_POST['codigo'],
+        $nombres     = $_POST["nombres"],
+        $apellidos   = $_POST["apellidos"],
+        $email       = $_POST["email"]
+    );
+
+    if ($resultado) {
+        header("Location: $redirect");
+        exit();
+    } else {
+        echo "Error al editar estudiante";
+    }
+
+
+// ---------------------------
+// 3. ELIMINAR ESTUDIANTE
+// ---------------------------
+} elseif ($action == 'eliminar') {
+
+    $codigo = $_GET['codigo'] ?? null;
+
+    if ($codigo) {
+        $resultado = $estudiante->eliminar($codigo);
+
+        if ($resultado) {
+            header("Location: $redirect");
+            exit();
         } else {
-            // Crear
-            $exito = $modelo->crear(
-                $_POST['nombres'],
-                $_POST['apellidos'],
-                $_POST['email'],
-                $_POST['password']
-            );
-            $mensaje = $exito ? "Estudiante creado" : "Error al crear (email ya existe)";
+            echo "Error al eliminar estudiante de la BD";
         }
-
-        // Redirigir a la lista
-        header("Location: ../views/estudiantes/listar.php?mensaje=" . urlencode($mensaje));
-        exit();
-    }
-
-    public function eliminar() {
-        $modelo = new Estudiante();
-        $exito = $modelo->eliminar($_GET['codigo']);
-        $mensaje = $exito ? "Estudiante eliminado" : "Error al eliminar";
-        
-        header("Location: ../views/estudiantes/listar.php?mensaje=" . urlencode($mensaje));
-        exit();
+    } else {
+        echo "Error: No se recibió el código para eliminar";
     }
 }
 
-// Procesar acción si se llama directamente
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'guardar') {
-    $controller = new EstudianteController();
-    $controller->guardar();
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'eliminar') {
-    $controller = new EstudianteController();
-    $controller->eliminar();
-}
 ?>
