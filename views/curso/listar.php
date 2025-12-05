@@ -2,6 +2,13 @@
 require_once '../../models/Curso.php';
 $curso = new Curso();
 $resultado = $curso->listar();
+$busqueda = isset($_GET["q"]) ? $_GET["q"] : "";
+
+if ($busqueda != "") {
+    $resultado = $curso->buscar($busqueda);
+} else {
+    $resultado = $curso->listar();
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -29,14 +36,42 @@ $resultado = $curso->listar();
 <body>
 
 <div class="container mt-5">
+<div class="row align-items-center mb-3">
+    <div class="col-md-6">
+        <h2>
+            <span class="title-box">Listado de Cursos</span>
+        </h2>
 
-    <h2>
-        <span class="title-box">Listado de Cursos</span>
-    </h2>
+        <a href="crear.php" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-1"></i> Añadir Nuevo Curso
+        </a>
+    </div>
 
-    <a href="crear.php" class="btn btn-primary mb-3">
-        Añadir Nuevo Curso
-    </a>
+    <div class="col-md-6">
+        <form action="listar.php" method="GET" class="d-flex justify-content-end">
+
+            <input type="text" 
+                   class="form-control me-2"
+                   name="q"
+                   placeholder="Buscar curso..."
+                   style="max-width: 300px;"
+                   value="<?php echo htmlspecialchars($busqueda); ?>">
+
+            <button class="btn btn-outline-primary" type="submit">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+
+            <?php if($busqueda != ""): ?>
+                <a href="listar.php" class="btn btn-outline-secondary ms-2">
+                    Limpiar
+                </a>
+            <?php endif; ?>
+
+        </form>
+    </div>
+
+</div>
+
 
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
@@ -84,6 +119,7 @@ $resultado = $curso->listar();
             </tbody>
 
         </table>
+
     </div>
 
 </div>

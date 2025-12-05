@@ -83,4 +83,26 @@ class Curso {
             echo "Error al eliminar: " . $e->getMessage();
         }
     }
+    public function buscar($texto)
+{
+    try {
+$sql = "SELECT c.idCurso,c.nombre,c.cupoMaximo,c.fechaInicio,c.fechaFin,n.nombre AS nivel,i.nombre AS idioma,a.nombre AS aula,
+d.codigoDocente,u.nombres AS nombreDocente,u.apellidos AS apellidoDocente
+FROM Curso c INNER JOIN Nivel n ON c.idNivel = n.idNivel INNER JOIN Idioma i ON c.idIdioma = i.idIdioma
+INNER JOIN Aula a ON c.idAula = a.idAula INNER JOIN Docente d ON c.codigoDocente = d.codigoDocente INNER JOIN Usuario u ON d.idUsuario = u.idUsuario
+WHERE c.nombre LIKE ? OR n.nombre LIKE ? OR i.nombre LIKE ? OR a.nombre LIKE ? OR u.nombres LIKE ? OR u.apellidos LIKE ?
+ORDER BY c.nombre ASC";
+
+        $stmt = $this->conn->prepare($sql);
+        $param = "%".$texto."%";
+        $stmt->execute([$param,$param,$param,$param,$param,$param]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    } catch(Exception $e) {
+        echo "Error al buscar: " . $e->getMessage();
+        return [];
+    }
+}
+
 }
