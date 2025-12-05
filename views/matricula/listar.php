@@ -1,90 +1,72 @@
 <?php
-require_once "../../controllers/MatriculaController.php";
-$controller = new MatriculaController();
-$lista = $controller->listar();
-?>
+require_once '../../models/Matricula.php';
+$matricula = new Matricula();
 
+$busqueda = isset($_GET["q"]) ? $_GET["q"] : "";
+
+if($busqueda != ""){
+    $resultado = $matricula->buscar($busqueda);
+} else {
+    $resultado = $matricula->listar();
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Lista de Matrículas</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-    <style>
-        body { background-color: #f8f9fa; }
-        .title-bar {
-            background: linear-gradient(45deg, #0d6efd, #0a58ca);
-            color: white;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Lista de Matrículas</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
-
 <body>
-
 <div class="container mt-5">
-    <div class="card shadow">
 
-        <div class="card-header title-bar py-3">
-            <h4 class="text-center mb-0">
-                <i class="bi bi-table me-2"></i>Lista de Matrículas Registradas
-            </h4>
-        </div>
-
-        <div class="card-body p-4">
-
-            <div class="mb-3 text-end">
-                <a href="crear.php" class="btn btn-primary">
-                    <i class="bi bi-plus-circle me-1"></i> Nueva Matrícula
-                </a>
-            </div>
-
-            <table class="table table-hover table-striped align-middle text-center">
-                <thead class="table-primary">
-                <tr>
-                    <th>ID</th>
-                    <th>Fecha Registro</th>
-                    <th>ID Estudiante</th>
-                    <th>ID Curso</th>
-                    <th>Turno</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <?php foreach ($lista as $fila): ?>
-                    <tr>
-                        <td><?= $fila['idMatricula'] ?></td>
-                        <td><?= $fila['fechaRegistro'] ?></td>
-                        <td><?= $fila['idEstudiante'] ?></td>
-                        <td><?= $fila['idCurso'] ?></td>
-                        <td>
-                            <span class="badge bg-info text-dark"><?= $fila['turno'] ?></span>
-                        </td>
-                        <td>
-                            <a href="editar.php?id=<?= $fila['idMatricula'] ?>" class="btn btn-warning btn-sm">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
-
-                            <a href="../../controllers/MatriculaController.php?action=eliminar&id=<?= $fila['idMatricula'] ?>"
-                               class="btn btn-danger btn-sm"
-                               onclick="return confirm('¿Seguro de eliminar este registro?');">
-                                <i class="bi bi-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-
-            </table>
-
-        </div>
-
+<div class="row align-items-center mb-3">
+    <div class="col-md-6">
+        <h2>Listado de Matrículas</h2>
+        <a href="crear.php" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i>Añadir Matrícula</a>
+    </div>
+    <div class="col-md-6">
+        <form action="listar.php" method="GET" class="d-flex justify-content-end">
+            <input type="text" class="form-control me-2" name="q" placeholder="Buscar matrícula..." style="max-width:300px;" value="<?= htmlspecialchars($busqueda); ?>">
+            <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i> Buscar</button>
+            <?php if($busqueda!=""): ?>
+                <a href="listar.php" class="btn btn-outline-secondary ms-2">Limpiar</a>
+            <?php endif; ?>
+        </form>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Curso</th>
+                <th>Estudiante</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if($resultado): foreach($resultado as $m): ?>
+            <tr>
+                <td><?= $m['idMatricula']; ?></td>
+                <td><?= $m['fechaMatricula']; ?></td>
+                <td><?= $m['estado']; ?></td>
+                <td><?= $m['curso']; ?></td>
+                <td><?= $m['apellidos'].', '.$m['nombres']; ?></td>
+                <td>
+                    <a href="editar.php?id=<?= $m['idMatricula']; ?>" class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i> Editar</a>
+                    <a href="../../controllers/MatriculaController.php?action=eliminar&id=<?= $m['idMatricula']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro de eliminar?');"><i class="bi bi-trash"></i> Eliminar</a>
+                </td>
+            </tr>
+            <?php endforeach; endif; ?>
+        </tbody>
+    </table>
+</div>
+
+</div>
 </body>
 </html>
