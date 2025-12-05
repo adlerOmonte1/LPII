@@ -4,7 +4,6 @@ require_once '../../models/Docente.php';
 $docenteModel = new Docente();
 $busqueda = ""; // Variable para mantener el texto en el input
 
-// 1. TU LÓGICA DE BÚSQUEDA (INTACTA)
 if (isset($_GET['q']) && !empty($_GET['q'])) {
     $busqueda = $_GET['q'];
     $docentes = $docenteModel->buscar($busqueda);
