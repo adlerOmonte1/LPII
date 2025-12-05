@@ -9,6 +9,7 @@ $estudiantes = $modelo->listar();
 <html>
 <head>
     <title>Lista de Estudiantes</title>
+    <link rel="stylesheet" href="../../css/estudiante.css">
 </head>
 <body>
     <h2>Lista de Estudiantes</h2>

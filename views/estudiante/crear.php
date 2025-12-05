@@ -13,6 +13,7 @@ if (isset($_GET['codigo']) && !isset($estudiante)) {
 <html>
 <head>
     <title><?php echo $titulo; ?></title>
+    <link rel="stylesheet" href="../../css/estudiante.css">
 
 </head>
 <body>
