@@ -2,43 +2,41 @@
 require_once '../models/Docente.php';
 
 $action = $_REQUEST['action'] ?? ''; 
-
+$docente = new Docente();
+$redirect = "/LPII/views/login/bienvenida.php?mod=docente&action=listar";
 if($action=='crear'){
-    $docente =new Docente();
-    $nombres = $_POST["nombres"];
-    $apellidos = $_POST["apellidos"];
-    $email = $_POST["email"];
-    $especialidad = $_POST["especialidad"];
-    $password = $_POST["password"];
-    #$codigoDocente =$_POST["codigoDocente"];
-    
-    $resultado = $docente->crear($nombres,$apellidos,$email,$password,$especialidad);
+    $resultado = $docente->crear(
+        $nombres = $_POST["nombres"],
+        $apellidos = $_POST["apellidos"],
+        $email = $_POST["email"],
+        $password = $_POST["password"],
+        $especialidad = $_POST["especialidad"],
+    );
     if($resultado){
         header("Location: ../views/docente/listar.php");
     }else{
         echo "Error al registrar docente";
     }
+    
 }elseif($action=='actualizar'){
-    $docente = new Docente();
-    $idUsuario = $_POST['idUsuario'];
-    $nombres = $_POST["nombres"];
-    $apellidos = $_POST["apellidos"];
-    $email = $_POST["email"];
-    #$contraseña = $_POST["contraseña"];
-    #$codigoDocente =$_POST["codigoDocente"];
-    $especialidad = $_POST["especialidad"];
-
-    $resultado = $docente->actualizar($idUsuario,$nombres,$apellidos,$email,$especialidad);
+    $resultado = $docente->actualizar(
+        $idUsuario = $_POST['idUsuario'],
+        $nombres = $_POST["nombres"],
+        $apellidos = $_POST["apellidos"],
+        $email = $_POST["email"],
+        #$contraseña = $_POST["contraseña"];
+        #$codigoDocente =$_POST["codigoDocente"];
+        $especialidad = $_POST["especialidad"],
+    );
 
     if($resultado){
         header("Location: ../views/docente/listar.php");
     }else{
         echo "Error al editar docente";
     }
-    }elseif($action == 'eliminar'){
+}elseif($action == 'eliminar'){
         $idUsuario =$_GET['id'];
         if ($idUsuario) {
-            $docente = new Docente();
             $resultado = $docente->eliminar($idUsuario);
             if ($resultado) {
                 header("Location: ../views/docente/listar.php");
@@ -49,7 +47,6 @@ if($action=='crear'){
         } else {
             echo "Error: No se recibió el ID para eliminar";
         }
-    
 }
 
 
