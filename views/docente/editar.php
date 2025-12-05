@@ -34,6 +34,7 @@ if(!$datos){
     </style>
 </head>
 <body>
+<?php require_once("../layout/header.php");?>
 
     <div class="container mt-5 mb-5">
         <div class="row justify-content-center">

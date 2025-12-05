@@ -38,7 +38,7 @@ if (isset($_GET['q']) && !empty($_GET['q'])) {
 </head>
 
 <body>
-
+<?php require_once("../layout/header.php");?>
 <div class="container mt-5">
 
     <h2>
