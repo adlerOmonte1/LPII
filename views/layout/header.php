@@ -38,20 +38,24 @@ if (session_status() === PHP_SESSION_NONE) {
 
             <ul class="navbar-nav mx-auto">
 
-                <!-- MENU COMÚN -->
+                <!-- MENU COMÚN (todos lo ven) -->
                 <li class="nav-item"><a class="nav-link" href="../curso/listar.php">Cursos</a></li>
                 <li class="nav-item"><a class="nav-link" href="../docente/listar.php">Docentes</a></li>
                 <li class="nav-item"><a class="nav-link" href="../horario/listar.php">Horario</a></li>
 
-                <!-- SOLO ADMIN -->
-                <?php if ($_SESSION["perfil"] === "administrador"): ?>
+
+                <!-- MENU COMPLETO SOLO PARA ADMIN Y DOCENTE -->
+                <?php if ($_SESSION["perfil"] === "administrador" || $_SESSION["perfil"] === "docente"): ?>
+
                     <li class="nav-item"><a class="nav-link" href="../estudiante/listar.php">Estudiantes</a></li>
                     <li class="nav-item"><a class="nav-link" href="../idioma/listar.php">Idiomas</a></li>
                     <li class="nav-item"><a class="nav-link" href="../matricula/listar.php">Matrículas</a></li>
                     <li class="nav-item"><a class="nav-link" href="../nivel/listar.php">Niveles</a></li>
+
                 <?php endif; ?>
 
             </ul>
+
 
             <div class="d-flex align-items-center">
                 <span class="text-light small me-3">
