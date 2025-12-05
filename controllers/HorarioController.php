@@ -12,9 +12,13 @@ if ($action == 'crear') {
     $inicio = $_POST["horaInicio"];
     $fin = $_POST["horaFin"];
 
-    $horario->crear($dia, $inicio, $fin);
+    $resultado =$horario->crear($dia, $inicio, $fin);
 
-    echo '<br><br><a href="../views/horario/listar.php">Volver a la lista</a>';
+    if($resultado){
+        header("Location: ../views/horario/listar.php");
+    }else{
+        echo "Error al registrar horario";
+    }
 
 }
 
@@ -25,18 +29,26 @@ elseif ($action == 'actualizar') {
     $inicio = $_POST["horaInicio"];
     $fin = $_POST["horaFin"];
 
-    $horario->actualizar($id, $dia, $inicio, $fin);
+    $resultado =$horario->actualizar($id, $dia, $inicio, $fin);
 
-    echo '<br><br><a href="../views/horario/listar.php">Volver a la lista</a>';
+    if($resultado){
+        header("Location: ../views/horario/listar.php");
+    }else{
+        echo "Error al registrar horario";
+    }
 
 }
 
 elseif ($action == 'eliminar') {
 
     $id = $_GET["id"];
-    $horario->eliminar($id);
+    $resultado = $horario->eliminar($id);
 
-    echo '<br><br><a href="../views/horario/listar.php">Volver a la lista</a>';
+    if($resultado){
+        header("Location: ../views/horario/listar.php");
+    }else{
+        echo "Error al registrar horario";
+    }
 
 }
 

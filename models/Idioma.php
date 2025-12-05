@@ -28,7 +28,7 @@ class Idioma {
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':nombre', $nombre);
             $stmt->execute();
-            echo "Idioma registrado correctamente.";
+            return true;
         } catch (Exception $e) {
             echo "Error al crear: " . $e->getMessage();
         }
@@ -41,12 +41,7 @@ class Idioma {
             $stmt->bindParam(':nombre', $nombre);
             $stmt->bindParam(':id', $id);
             $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                echo "Idioma actualizado correctamente.";
-            } else {
-                echo "No se realizó ningún cambio (o no se encontró el ID).";
-            }
+            return true;
 
         } catch (Exception $e) {
             echo "Error al actualizar: " . $e->getMessage();
@@ -59,12 +54,7 @@ class Idioma {
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':id', $id);
             $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                echo "Idioma eliminado correctamente.";
-            } else {
-                echo "No se encontró el idioma con ese ID.";
-            }
+            return true;
 
         } catch (Exception $e) {
             echo "Error al eliminar: " . $e->getMessage();

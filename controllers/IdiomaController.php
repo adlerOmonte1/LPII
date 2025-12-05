@@ -9,9 +9,13 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 if ($action == 'crear') {
 
     $nombre = $_POST["nombre"];
-    $idioma->crear($nombre);
+    $resultado =$idioma->crear($nombre);
 
-    echo '<br><br><a href="../views/idioma/listar.php">Volver a la lista</a>';
+    if($idioma){
+        header("Location: ../views/idioma/listar.php");
+    }else{
+        echo "Error al registrar idioma";
+    }
 
 }
 
@@ -19,9 +23,13 @@ elseif ($action == 'actualizar') {
 
     $id = $_POST["idIdioma"];
     $nombre = $_POST["nombre"];
-    $idioma->actualizar($id, $nombre);
+    $resultado =$idioma->actualizar($id, $nombre);
 
-    echo '<br><br><a href="../views/idioma/listar.php">Volver a la lista</a>';
+    if($idioma){
+        header("Location: ../views/idioma/listar.php");
+    }else{
+        echo "Error al registrar idioma";
+    }
 
 }
 
@@ -30,7 +38,11 @@ elseif ($action == 'eliminar') {
     $id = $_GET["id"];
     $idioma->eliminar($id);
 
-    echo '<br><br><a href="../views/idioma/listar.php">Volver a la lista</a>';
+    if($idioma){
+        header("Location: ../views/idioma/listar.php");
+    }else{
+        echo "Error al registrar idioma";
+    }
 
 }
 

@@ -31,8 +31,8 @@ class Horario {
             $stmt->bindParam(':inicio', $horaInicio);
             $stmt->bindParam(':fin', $horaFin);
             $stmt->execute();
+            return true;
 
-            echo "Horario registrado correctamente.";
         } catch (Exception $e) {
             echo "Error al crear: " . $e->getMessage();
         }
@@ -49,12 +49,7 @@ class Horario {
             $stmt->bindParam(':fin', $horaFin);
             $stmt->bindParam(':id', $id);
             $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                echo "Horario actualizado correctamente.";
-            } else {
-                echo "No se realizó ningún cambio (o no se encontró el ID).";
-            }
+            return true;
         } catch (Exception $e) {
             echo "Error al actualizar: " . $e->getMessage();
         }
@@ -66,12 +61,7 @@ class Horario {
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':id', $id);
             $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                echo "Horario eliminado correctamente.";
-            } else {
-                echo "No se encontró el horario con ese ID.";
-            }
+            return true;
         } catch (Exception $e) {
             echo "Error al eliminar: " . $e->getMessage();
         }

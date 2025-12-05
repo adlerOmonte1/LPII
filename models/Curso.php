@@ -38,10 +38,8 @@ class Curso {
             $stmt->bindParam(':idIdioma', $idIdioma);
             $stmt->bindParam(':idAula', $idAula);
             $stmt->bindParam(':codigoDocente', $codigoDocente);
-
             $stmt->execute();
-            echo "Curso registrado correctamente.";
-
+            return true;
         } catch (Exception $e) {
             echo "Error al crear: " . $e->getMessage();
         }
@@ -64,14 +62,8 @@ class Curso {
             $stmt->bindParam(':idIdioma', $idIdioma);
             $stmt->bindParam(':idAula', $idAula);
             $stmt->bindParam(':codigoDocente', $codigoDocente);
-
             $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                echo "Curso actualizado correctamente.";
-            } else {
-                echo "No se realizó ningún cambio (o no se encontró el ID).";
-            }
+            return true;
 
         } catch (Exception $e) {
             echo "Error al actualizar: " . $e->getMessage();
@@ -85,12 +77,7 @@ class Curso {
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':idCurso', $idCurso);
             $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                echo "Curso eliminado correctamente.";
-            } else {
-                echo "No se encontró el curso con ese ID.";
-            }
+            return true;
 
         } catch (Exception $e) {
             echo "Error al eliminar: " . $e->getMessage();

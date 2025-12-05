@@ -8,7 +8,7 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 if ($action == 'crear') {
 
-    $curso->crear(
+    $resultado = $curso->crear(
         nombre: $_POST["nombre"],
         cupoMaximo: $_POST["cupoMaximo"],
         fechaInicio: $_POST["fechaInicio"],
@@ -19,13 +19,17 @@ if ($action == 'crear') {
         codigoDocente: $_POST["codigoDocente"]
     );
 
-    echo '<br><br><a href="../views/curso/listar.php">Volver a la lista</a>';
+    if($resultado){
+        header("Location: ../views/curso/listar.php");
+    }else{
+        echo "Error al registrar curso";
+    }
 
 }
 
 elseif ($action == 'actualizar') {
 
-    $curso->actualizar(
+    $resultado = $curso->actualizar(
         idCurso: $_POST["idCurso"],
         nombre: $_POST["nombre"],
         cupoMaximo: $_POST["cupoMaximo"],
@@ -37,15 +41,25 @@ elseif ($action == 'actualizar') {
         codigoDocente: $_POST["codigoDocente"]
     );
 
-    echo '<br><br><a href="../views/curso/listar.php">Volver a la lista</a>';
+
+    if($resultado){
+        header("Location: ../views/curso/listar.php");
+    }else{
+        echo "Error al registrar curso";
+    }
 
 }
 
 elseif ($action == 'eliminar') {
 
-    $curso->eliminar($_GET["id"]);
+    $resultado = $curso->eliminar($_GET["id"]);
 
-    echo '<br><br><a href="../views/curso/listar.php">Volver a la lista</a>';
+   
+    if($resultado){
+        header("Location: ../views/curso/listar.php");
+    }else{
+        echo "Error al registrar curso";
+    }
 
 }
 
