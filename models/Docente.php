@@ -25,12 +25,18 @@ class Docente{
         try{
             #$perfil="docente";
             #$this->conn->DB::beginTransaction();
-            $sqlUsuario ="INSERT INTO usuario(nombres,apellidos,email,contraseña,perfil) values (?,?,?,?,?)";
-            $stmtUsuario = $this->conn->prepare($sqlUsuario);
+            $sql ="INSERT INTO usuario(nombres,apellidos,email,contraseña,perfil) values (:nombre, :apellidos, :email , :contraseña , :perfil)";
+            $stmtUsuario = $this->conn->prepare($sql);
+           
             $passHash = password_hash($contraseña, PASSWORD_BCRYPT);
-            $stmtUsuario->execute(
-                [$nombres,$apellidos,$email,$passHash,'Docente']
-            );
+            $perfil = 'docente';
+            $stmtUsuario->bindParam(':nombre', $nombre);
+            $stmtUsuario->bindParam(':apellidos', $apellidos);
+            $stmtUsuario->bindParam(':email',$email);
+            $stmtUsuario->bindParam(':contraseña',$passHash);
+            $stmtUsuario->bindParam(':perfil', $perfil);
+
+
             $idUsuarioCreado = $this->conn->lastInsertId();#captura del id del user creado
             $sqlDocente = "INSERT INTO docente(idUsuario,especialidad) values (?,?)";
             $stmtDocente= $this->conn->prepare($sqlDocente);
