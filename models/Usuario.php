@@ -35,5 +35,25 @@ class Usuario {
 
         return $stmt->execute([$nombres, $apellidos, $email, $passwordHash, $perfil]);
     }
+    // ---------------------------------------------------
+// LOGIN CON CORREO Y PASSWORD HASHEADA
+// ---------------------------------------------------
+   public function login($email, $password)
+{
+    $usuario = $this->obtenerPorEmail($email);
+
+    if (!$usuario) {
+        return false;
+    }
+
+    // Contraseña hasheada
+    if (password_verify($password, $usuario['contraseña'])) {
+        return $usuario;
+    }
+
+    return false;
+}
+
+
 
 }
