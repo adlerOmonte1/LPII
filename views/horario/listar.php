@@ -64,6 +64,10 @@ $resultado = $horario->listar();
                     <td><?php echo $row["horaFin"]; ?></td>
 
                     <td>
+                        <a href="editar.php?id=<?php echo $row['idHorario']; ?>" 
+                            class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
                         <a href="../../controllers/HorarioController.php?action=eliminar&id=<?php echo $row['idHorario']; ?>"
                            class="btn btn-danger btn-sm"
                            onclick="return confirm('¿Estás seguro de eliminar este horario?');">

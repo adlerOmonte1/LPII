@@ -60,6 +60,10 @@ $resultado = $idioma->listar();
                     <td><?php echo $idioma["nombre"]; ?></td>
 
                     <td>
+                        <a href="editar.php?id=<?php echo $idioma['idIdioma']; ?>" 
+                            class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
                         <a href="../../controllers/IdiomaController.php?action=eliminar&id=<?php echo $idioma['idIdioma']; ?>"
                            class="btn btn-danger btn-sm"
                            onclick="return confirm('¿Estás seguro de eliminar este idioma?');">

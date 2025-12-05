@@ -65,11 +65,16 @@ $resultado = $curso->listar();
                     <td><?php echo $curso["fechaFin"]; ?></td>
 
                     <td>
+                        <a href="editar.php?id=<?php echo $curso['idCurso']; ?>" 
+                            class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
                         <a href="../../controllers/CursoController.php?action=eliminar&id=<?php echo $curso['idCurso']; ?>"
                            class="btn btn-danger btn-sm"
                            onclick="return confirm('¿Estás seguro de eliminar este curso?');">
                             Eliminar
                         </a>
+
                     </td>
                 </tr>
             <?php
