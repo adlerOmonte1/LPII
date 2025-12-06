@@ -54,6 +54,7 @@ if (!isset($_SESSION['email'])) {
                 <!-- MENU COMPLETO SOLO PARA ADMIN Y DOCENTE -->
                 <?php if ($_SESSION["perfil"] === "administrador" || $_SESSION["perfil"] === "docente"): ?>
                     <li class="nav-item"><a class="nav-link" href="../estudiante/listar.php">Estudiantes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../docente/listar.php">Docentes</a></li>
                     <li class="nav-item"><a class="nav-link" href="../curso/micurso.php">Cursos Asignados</a></li>
 
                     <li class="nav-item"><a class="nav-link" href="../idioma/listar.php">Idiomas</a></li>
