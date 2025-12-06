@@ -115,7 +115,7 @@ public function matricular($idCurso, $codigoEstudiante)
         return "OK";
 
     } catch (Exception $e) {
-        return "ERROR";
+        echo "Error en la matricula: " . $e->getMessage();
     }
 }
 
@@ -226,6 +226,15 @@ public function obtenerDocentes() {
     $stmt = $this->conn->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_OBJ);
+}
+
+public function obtenerCursosporIdDocente($idUsuario){
+    $sql = "SELECT idCurso, nombre, fechaInicio,fechaFin FROM curso cu JOIN docente do 
+    on do.codigoDocente=cu.codigoDocente  WHERE do.idusuario=:idusuario";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':idusuario',$idUsuario);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 

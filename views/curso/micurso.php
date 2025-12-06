@@ -1,24 +1,25 @@
 <?php
 
-session_start();   // ← NECESARIO
+session_start();  
 
 require_once '../../models/Curso.php';
+$idUsuario = $_SESSION['idUsuario'];
 $curso = new Curso();
-$resultado = $curso->listar();
+$resultado = $curso->obtenerCursosporIdDocente($idUsuario);
+
 $busqueda = isset($_GET["q"]) ? $_GET["q"] : "";
 
 if ($busqueda != "") {
     $resultado = $curso->buscar($busqueda);
 } else {
-    $resultado = $curso->listar();
+    $resultado = $curso->obtenerCursosporIdDocente($idUsuario);
 }
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Cursos</title>
-
+    <title>Lista de Mis Cursos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -43,18 +44,18 @@ if ($busqueda != "") {
     <div class="row align-items-center mb-3">
         <div class="col-md-6">
             <h2>
-                <span class="title-box">Listado de Cursos</span>
+                <span class="title-box">Listado de Mis Cursos</span>
             </h2>
 
             <?php if ($_SESSION['perfil'] === 'administrador'): ?>
                 <a href="crear.php" class="btn btn-primary">
-                    <i class="bi bi-plus-circle me-1"></i> Añadir Nuevo Curso
+                    <i class="bi bi-plus-circle me-1"></i>prueba
                 </a>
             <?php endif; ?>
         </div>
 
         <div class="col-md-6">
-            <form action="listar.php" method="GET" class="d-flex justify-content-end">
+            <form  method="GET" class="d-flex justify-content-end">
 
                 <input type="text" 
                        class="form-control me-2"
@@ -85,13 +86,8 @@ if ($busqueda != "") {
                 <tr>
                     <th>ID</th>
                     <th>Nombre</th>
-                    <th>Cupo</th>
                     <th>Inicio</th>
                     <th>Fin</th>
-                    <th>Nivel</th>
-                    <th>Idioma</th>
-                    <th>Aula</th>
-                    <th>Docente</th>
                     <th style="width: 160px;">Acciones</th>
                 </tr>
             </thead>
@@ -104,13 +100,8 @@ if ($busqueda != "") {
                 <tr>
                     <td><?= $curso["idCurso"] ?></td>
                     <td><?= $curso["nombre"] ?></td>
-                    <td><?= $curso["cupoMaximo"] ?></td>
                     <td><?= $curso["fechaInicio"] ?></td>
                     <td><?= $curso["fechaFin"] ?></td>
-                    <td><?= $curso["nivel"] ?></td>
-                    <td><?= $curso["idioma"] ?></td>
-                    <td><?= $curso["aula"] ?></td>
-                    <td><?= $curso["docente"] ?></td>
 
                     <td>
                         <?php if ($_SESSION['perfil'] === 'administrador'): ?>

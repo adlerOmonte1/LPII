@@ -40,30 +40,37 @@ if (isset($_GET['q']) && !empty($_GET['q'])) {
 <?php require_once("../layout/header.php");?>
 <div class="container mt-5">
 
-    <h2>
-        <span class="title-box">Listado de Docentes</span>
-    </h2>
-    <?php if ($_SESSION['perfil'] === 'administrador'): ?>
-        <a href="crear.php" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-1"></i> Añadir Nuevo Curso
-        </a>
-    <?php endif;?>
-    <div class="row mb-3">
-        
+        <h2>
+            <span class="title-box">Listado de Docentes</span>
+        </h2>
 
-        <div class="col-md-8">
-            <form action="listar.php" method="GET" class="d-flex">
-                <input type="text" class="form-control me-2" name="q" 
-                       placeholder="Buscar docente..." 
-                       value="<?php echo htmlspecialchars($busqueda); ?>">
-                <button class="btn btn-outline-primary" type="submit">Buscar</button>
-                
-                <?php if($busqueda != ""): ?>
-                    <a href="listar.php" class="btn btn-outline-secondary ms-2">Limpiar</a>
+        <div class="row mb-3">
+
+            <div class="col-md-4">
+                <?php if ($_SESSION['perfil'] === 'administrador'): ?>
+                    <a href="crear.php" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-1"></i> Añadir Nuevo Docente
+                    </a>
                 <?php endif; ?>
-            </form>
+            </div>
+
+            <div class="col-md-8">
+                <form action="listar.php" method="GET" class="d-flex">
+                    <input
+                        type="text"
+                        class="form-control me-2"
+                        name="q"
+                        placeholder="Buscar estudiante..."
+                        value="<?php echo htmlspecialchars($busqueda); ?>">
+                    <button class="btn btn-outline-primary" type="submit">Buscar</button>
+
+                    <?php if ($busqueda != ""): ?>
+                        <a href="listar.php" class="btn btn-outline-secondary ms-2">Limpiar</a>
+                    <?php endif; ?>
+                </form>
+            </div>
+
         </div>
-    </div>
 
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
