@@ -31,7 +31,6 @@ class Estudiante
     public function crear($nombres, $apellidos, $email, $contraseña)
     {
         try {
-            $this->conn->beginTransaction();
 
             // Crear usuario
             $sqlUsuario = "INSERT INTO Usuario(nombres, apellidos, email, contraseña, perfil)
@@ -58,12 +57,9 @@ class Estudiante
             $stmtEst->bindParam(":idUsuario", $idUsuario);
             $stmtEst->execute();
 
-            $this->conn->commit();
             return true;
         } catch (Exception $e) {
-            $this->conn->rollBack();
             echo "Error al crear estudiante: " . $e->getMessage();
-            return false;
         }
     }
 
@@ -110,7 +106,6 @@ class Estudiante
     public function eliminar($codigoEstudiante)
     {
         try {
-            $this->conn->beginTransaction();
 
             $est = $this->obtenerPorCodigo($codigoEstudiante);
             if (!$est) return false;
@@ -126,11 +121,8 @@ class Estudiante
             $stmtUsuario = $this->conn->prepare($sqlUsuario);
             $stmtUsuario->bindParam(":idUsuario", $est->idUsuario);
             $stmtUsuario->execute();
-
-            $this->conn->commit();
             return true;
         } catch (Exception $e) {
-            $this->conn->rollBack();
             echo "Error al eliminar estudiante: " . $e->getMessage();
             return false;
         }
