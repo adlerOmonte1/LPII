@@ -154,4 +154,15 @@ class Estudiante
             echo "Ocurrió un error en la búsqueda: " . $e->getMessage();
         }
     }
+    public function registrarDesdeUsuario($idUsuario)
+    {
+        try {
+            $sqlEst = "INSERT INTO Estudiante(idUsuario) VALUES (:idUsuario)";
+            $stmtEst = $this->conn->prepare($sqlEst);
+            $stmtEst->bindParam(":idUsuario", $idUsuario);
+            return $stmtEst->execute();
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }
