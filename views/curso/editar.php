@@ -86,57 +86,57 @@ $docentes = $cursoModel->obtenerDocentes();
                         </div>
                         <h5 class="text-primary mb-3 mt-4 border-bottom pb-2">Asignaciones</h5>
 
-<!-- NIVEL -->
-<div class="mb-3">
-    <label class="form-label fw-bold">Nivel</label>
-    <select class="form-select" name="idNivel" required>
-        <?php foreach ($niveles as $n): ?>
-            <option value="<?= $n->idNivel ?>"
-                <?= ($curso->idNivel == $n->idNivel) ? 'selected' : '' ?>>
-                <?= $n->nombre ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</div>
 
-<!-- IDIOMA -->
-<div class="mb-3">
-    <label class="form-label fw-bold">Idioma</label>
-    <select class="form-select" name="idIdioma" required>
-        <?php foreach ($idiomas as $i): ?>
-            <option value="<?= $i->idIdioma ?>"
-                <?= ($curso->idIdioma == $i->idIdioma) ? 'selected' : '' ?>>
-                <?= $i->nombre ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nivel</label>
+                            <select class="form-select" name="idNivel" required>
+                                <?php foreach ($niveles as $n): ?>
+                                    <option value="<?= $n->idNivel ?>"
+                                        <?= ($curso->idNivel == $n->idNivel) ? 'selected' : '' ?>>
+                                        <?= $n->nombre ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
 
-<!-- AULA -->
-<div class="mb-3">
-    <label class="form-label fw-bold">Aula</label>
-    <select class="form-select" name="idAula" required>
-        <?php foreach ($aulas as $a): ?>
-            <option value="<?= $a->idAula ?>"
-                <?= ($curso->idAula == $a->idAula) ? 'selected' : '' ?>>
-                <?= $a->nombre ?> — Capacidad: <?= $a->capacidad ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</div>
 
-<!-- DOCENTE -->
-<div class="mb-4">
-    <label class="form-label fw-bold">Docente</label>
-    <select class="form-select" name="codigoDocente" required>
-        <?php foreach ($docentes as $d): ?>
-            <option value="<?= $d->codigoDocente ?>"
-                <?= ($curso->codigoDocente == $d->codigoDocente) ? 'selected' : '' ?>>
-                <?= $d->apellidos ?>, <?= $d->nombres ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Idioma</label>
+                            <select class="form-select" name="idIdioma" required>
+                                <?php foreach ($idiomas as $i): ?>
+                                    <option value="<?= $i->idIdioma ?>"
+                                        <?= ($curso->idIdioma == $i->idIdioma) ? 'selected' : '' ?>>
+                                        <?= $i->nombre ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Aula</label>
+                            <select class="form-select" name="idAula" required>
+                                <?php foreach ($aulas as $a): ?>
+                                    <option value="<?= $a->idAula ?>"
+                                        <?= ($curso->idAula == $a->idAula) ? 'selected' : '' ?>>
+                                        <?= $a->nombre ?> — Capacidad: <?= $a->capacidad ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Docente</label>
+                            <select class="form-select" name="codigoDocente" required>
+                                <?php foreach ($docentes as $d): ?>
+                                    <option value="<?= $d->codigoDocente ?>"
+                                        <?= ($curso->codigoDocente == $d->codigoDocente) ? 'selected' : '' ?>>
+                                        <?= $d->apellidos ?>, <?= $d->nombres ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
 
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">

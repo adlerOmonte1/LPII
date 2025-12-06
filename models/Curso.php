@@ -42,9 +42,6 @@ public function listar() {
     }
 }
 
-// =======================================================
-// OBTENER CÓDIGO DEL ESTUDIANTE POR ID USUARIO
-// =======================================================
 public function obtenerCodigoEstudiante($idUsuario)
 {
     $sql = "SELECT codigoEstudiante FROM Estudiante WHERE idUsuario = :idUsuario";
@@ -56,9 +53,6 @@ public function obtenerCodigoEstudiante($idUsuario)
     return $row ? $row['codigoEstudiante'] : null;
 }
 
-// =======================================================
-// VERIFICAR SI EL ESTUDIANTE YA ESTÁ MATRICULADO
-// =======================================================
 public function verificarMatricula($idCurso, $codigoEstudiante)
 {
     $sql = "SELECT COUNT(*) AS total 
@@ -71,22 +65,17 @@ public function verificarMatricula($idCurso, $codigoEstudiante)
     $stmt->execute();
 
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $data['total'] > 0; // true si ya está matriculado
+    return $data['total'] > 0;
 }
 
-// =======================================================
-// MATRICULAR ESTUDIANTE
-// =======================================================
 public function matricular($idCurso, $codigoEstudiante)
 {
     try {
 
-        // 1. Verificar si ya está matriculado
         if ($this->verificarMatricula($idCurso, $codigoEstudiante)) {
             return "YA_MATRICULADO";
         }
 
-        // 2. Verificar cupos disponibles
         $sql = "SELECT 
                     cupoMaximo,
                     (SELECT COUNT(*) FROM Matricula WHERE idCurso = :idCurso) AS inscritos
@@ -103,7 +92,6 @@ public function matricular($idCurso, $codigoEstudiante)
             return "SIN_CUPO";
         }
 
-        // 3. Registrar matrícula
         $sql = "INSERT INTO Matricula (fechaMatricula, estado, idCurso, codigoEstudiante)
                 VALUES (CURDATE(), 'Activo', :idCurso, :codigoEstudiante)";
 

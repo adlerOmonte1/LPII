@@ -1,6 +1,6 @@
 <?php
 
-session_start();   // ← NECESARIO
+session_start();  
 
 require_once '../../models/Curso.php';
 $curso = new Curso();

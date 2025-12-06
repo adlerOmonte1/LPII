@@ -75,7 +75,7 @@ $docentes = $cursoModel->obtenerDocentes();
 
                         <h5 class="text-primary mb-3 mt-4 border-bottom pb-2">Asignaciones</h5>
 
-                        <!-- NIVEL -->
+                    
                         <div class="mb-3">
                             <label class="form-label fw-bold">Nivel</label>
                             <select class="form-select" name="idNivel" required>
@@ -86,7 +86,7 @@ $docentes = $cursoModel->obtenerDocentes();
                             </select>
                         </div>
 
-                        <!-- IDIOMA -->
+                    
                         <div class="mb-3">
                             <label class="form-label fw-bold">Idioma</label>
                             <select class="form-select" name="idIdioma" required>
@@ -97,7 +97,7 @@ $docentes = $cursoModel->obtenerDocentes();
                             </select>
                         </div>
 
-                        <!-- AULA -->
+                     
                         <div class="mb-3">
                             <label class="form-label fw-bold">Aula</label>
                             <select class="form-select" name="idAula" required>
@@ -110,7 +110,7 @@ $docentes = $cursoModel->obtenerDocentes();
                             </select>
                         </div>
 
-                        <!-- DOCENTE -->
+                     
                         <div class="mb-4">
                             <label class="form-label fw-bold">Docente</label>
                             <select class="form-select" name="codigoDocente" required>
