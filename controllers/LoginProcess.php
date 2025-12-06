@@ -17,7 +17,7 @@ if ($data) {
     $_SESSION['email']    = $data['email'];
     $_SESSION['nombres']  = $data['nombres'];
     $_SESSION['perfil']   = $data['perfil'];
-    $_SESSION['id_usuario'] = $data['id_usuario'];
+    $_SESSION['idUsuario'] = $data['idUsuario'];
 
     header("Location: ../views/login/bienvenida.php");
     exit();

@@ -61,23 +61,27 @@ class Usuario {
     // ---------------------------------------------------
     // LOGIN CON VERIFICACIÓN HASH
     // ---------------------------------------------------
-    public function login($email, $password) {
-        try {
-            $usuario = $this->obtenerPorEmail($email);
-            if (!$usuario) {
-                return false;
-            }
+     public function login($email, $password) {
+    try {
+        $sql = "SELECT idUsuario, email, nombres, apellidos, perfil, contraseña
+                FROM Usuario
+                WHERE email = :email";
 
-            if (password_verify($password, $usuario['contraseña'])) {
-                return $usuario;
-            }
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
 
-            return false;
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        } catch (Exception $e) {
-            echo "Error en login: " . $e->getMessage();
-            return false;
+        if ($usuario && password_verify($password, $usuario['contraseña'])) {
+            return $usuario;
         }
+
+        return false;
+
+    } catch (Exception $e) {
+        return false;
     }
+}
 
 }
