@@ -218,6 +218,37 @@ public function obtenerAulas() {
     return $stmt->fetchAll(PDO::FETCH_OBJ);
 }
 
+public function obtenerCursosporIdDocente($idUsuario){
+    $sql = "SELECT idCurso, nombre, fechaInicio,fechaFin FROM curso cu JOIN docente do 
+    on do.codigoDocente=cu.codigoDocente  WHERE do.idusuario=:idusuario";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':idusuario',$idUsuario);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function obtenerCursosporIdEstudiante($idUsuario){
+    $sql = "SELECT cu.idCurso, cu.nombre, fechaInicio, fechaFin
+            FROM Curso cu JOIN Matricula ma ON cu.idCurso = ma.idCurso JOIN Estudiante es 
+            ON ma.codigoEstudiante = es.codigoEstudiante WHERE es.idUsuario = :idusuario";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':idusuario',$idUsuario);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function obtenerEstudiantesInscritos($idCurso){
+    $sql = "SELECT nombres, apellidos, email,fechaMatricula from Matricula m JOIN estudiante e on
+    e.codigoEstudiante = m.codigoEstudiante JOIN usuario u on e.idusuario=u.idusuario WHERE
+    m.idCurso = :idCurso";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':idCurso',$idCurso);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+
 public function obtenerDocentes() {
     $sql = "SELECT d.codigoDocente, u.nombres, u.apellidos
             FROM Docente d
@@ -225,7 +256,7 @@ public function obtenerDocentes() {
             ORDER BY u.apellidos ASC";
     $stmt = $this->conn->prepare($sql);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_OBJ);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 

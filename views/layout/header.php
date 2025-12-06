@@ -46,14 +46,16 @@ if (!isset($_SESSION['email'])) {
 
                 <!-- MENU COMÚN (todos lo ven) -->
                 <li class="nav-item"><a class="nav-link" href="../curso/listar.php">Cursos</a></li>
-                <li class="nav-item"><a class="nav-link" href="../docente/listar.php">Docentes</a></li>
+                <li class="nav-item"><a class="nav-link" href="../curso/micursoest.php">Cursando </a></li>
                 <li class="nav-item"><a class="nav-link" href="../horario/listar.php">Horario</a></li>
 
+            
 
                 <!-- MENU COMPLETO SOLO PARA ADMIN Y DOCENTE -->
                 <?php if ($_SESSION["perfil"] === "administrador" || $_SESSION["perfil"] === "docente"): ?>
-
                     <li class="nav-item"><a class="nav-link" href="../estudiante/listar.php">Estudiantes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../curso/micurso.php">Cursos Asignados</a></li>
+
                     <li class="nav-item"><a class="nav-link" href="../idioma/listar.php">Idiomas</a></li>
                     <li class="nav-item"><a class="nav-link" href="../matricula/listar.php">Matrículas</a></li>
                     <li class="nav-item"><a class="nav-link" href="../asistencia/listar.php">Asistencias</a></li>
