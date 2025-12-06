@@ -11,9 +11,7 @@ class Usuario {
     }
 
 
-    // ---------------------------------------------------
-    // OBTENER USUARIO POR EMAIL
-    // ---------------------------------------------------
+
     public function obtenerPorEmail($email) {
         try {
             $sql = "SELECT * FROM Usuario WHERE email = :email";
@@ -30,38 +28,28 @@ class Usuario {
     }
 
 
+ public function registrar($nombres, $apellidos, $email, $passwordHash, $perfil) {
+        try {
+            $sql = "INSERT INTO Usuario (nombres, apellidos, email, contraseña, perfil)
+                    VALUES (:nombres, :apellidos, :email, :clave, :perfil)";
 
-    // ---------------------------------------------------
-    // REGISTRAR USUARIO (PASSWORD HASHEADA)
-    // ---------------------------------------------------
-   public function registrar($nombres, $apellidos, $email, $passwordHash, $perfil) {
-    try {
-        $sql = "INSERT INTO Usuario (nombres, apellidos, email, contraseña, perfil)
-                VALUES (:nombres, :apellidos, :email, :password, :perfil)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':nombres', $nombres);
+            $stmt->bindParam(':apellidos', $apellidos);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':clave', $passwordHash);
+            $stmt->bindParam(':perfil', $perfil);
 
-        $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $this->conn->lastInsertId();
 
-        $stmt->bindParam(':nombres', $nombres);
-        $stmt->bindParam(':apellidos', $apellidos);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':password', $passwordHash);
-        $stmt->bindParam(':perfil', $perfil);
-
-        return $stmt->execute();  
-
-    } catch (Exception $e) {
-        return false;              
+        } catch (Exception $e) {
+            return false;
+        }
     }
-}
 
 
-
-
-
-    // ---------------------------------------------------
-    // LOGIN CON VERIFICACIÓN HASH
-    // ---------------------------------------------------
-     public function login($email, $password) {
+    public function login($email, $password) {
     try {
         $sql = "SELECT idUsuario, email, nombres, apellidos, perfil, contraseña
                 FROM Usuario
