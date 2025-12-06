@@ -12,16 +12,112 @@ class Curso {
     }
 
 
-    public function listar() {
-        try {
-            $sql = "SELECT * FROM Curso ORDER BY nombre ASC";
-            $resultado = $this->conn->query($sql);
-            return $resultado;
-        } catch (Exception $e) {
-            echo "Ha ocurrido un error al listar: " . $e->getMessage();
-        }
+public function listar() {
+    try {
+        $sql = "SELECT 
+                    c.idCurso,
+                    c.nombre,
+                    c.cupoMaximo,
+                    c.fechaInicio,
+                    c.fechaFin,
+                    n.nombre AS nivel,
+                    i.nombre AS idioma,
+                    a.nombre AS aula,
+                    CONCAT(u.apellidos, ', ', u.nombres) AS docente
+                FROM Curso c
+                INNER JOIN Nivel n ON c.idNivel = n.idNivel
+                INNER JOIN Idioma i ON c.idIdioma = i.idIdioma
+                INNER JOIN Aula a ON c.idAula = a.idAula
+                INNER JOIN Docente d ON c.codigoDocente = d.codigoDocente
+                INNER JOIN Usuario u ON u.idUsuario = d.idUsuario
+                ORDER BY c.nombre ASC";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    } catch (Exception $e) {
+        echo "Error al listar cursos: " . $e->getMessage();
         return [];
     }
+}
+
+// =======================================================
+// OBTENER CÓDIGO DEL ESTUDIANTE POR ID USUARIO
+// =======================================================
+public function obtenerCodigoEstudiante($idUsuario)
+{
+    $sql = "SELECT codigoEstudiante FROM Estudiante WHERE idUsuario = :idUsuario";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':idUsuario', $idUsuario);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $row ? $row['codigoEstudiante'] : null;
+}
+
+// =======================================================
+// VERIFICAR SI EL ESTUDIANTE YA ESTÁ MATRICULADO
+// =======================================================
+public function verificarMatricula($idCurso, $codigoEstudiante)
+{
+    $sql = "SELECT COUNT(*) AS total 
+            FROM Matricula 
+            WHERE idCurso = :idCurso AND codigoEstudiante = :codigoEstudiante";
+
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':idCurso', $idCurso);
+    $stmt->bindParam(':codigoEstudiante', $codigoEstudiante);
+    $stmt->execute();
+
+    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $data['total'] > 0; // true si ya está matriculado
+}
+
+// =======================================================
+// MATRICULAR ESTUDIANTE
+// =======================================================
+public function matricular($idCurso, $codigoEstudiante)
+{
+    try {
+
+        // 1. Verificar si ya está matriculado
+        if ($this->verificarMatricula($idCurso, $codigoEstudiante)) {
+            return "YA_MATRICULADO";
+        }
+
+        // 2. Verificar cupos disponibles
+        $sql = "SELECT 
+                    cupoMaximo,
+                    (SELECT COUNT(*) FROM Matricula WHERE idCurso = :idCurso) AS inscritos
+                FROM Curso
+                WHERE idCurso = :idCurso";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':idCurso', $idCurso);
+        $stmt->execute();
+
+        $info = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($info['inscritos'] >= $info['cupoMaximo']) {
+            return "SIN_CUPO";
+        }
+
+        // 3. Registrar matrícula
+        $sql = "INSERT INTO Matricula (fechaMatricula, estado, idCurso, codigoEstudiante)
+                VALUES (CURDATE(), 'Activo', :idCurso, :codigoEstudiante)";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':idCurso', $idCurso);
+        $stmt->bindParam(':codigoEstudiante', $codigoEstudiante);
+        $stmt->execute();
+
+        return "OK";
+
+    } catch (Exception $e) {
+        return "ERROR";
+    }
+}
 
  
     public function crear($nombre, $cupoMaximo, $fechaInicio, $fechaFin, $idNivel, $idIdioma, $idAula, $codigoDocente) {

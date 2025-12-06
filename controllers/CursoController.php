@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once '../models/Curso.php';
 
 $curso = new Curso();
@@ -62,6 +62,72 @@ elseif ($action == 'eliminar') {
     }
 
 }
+elseif ($action == 'matricular') {
+
+    // Ya existe session_start arriba
+
+    // PASO 1: Intentar obtener el ID usando las variables del login
+    $idUsuario = null;
+
+    // LoginController.php usa: idUsuario
+    if (!empty($_SESSION['idUsuario'])) {
+        $idUsuario = $_SESSION['idUsuario'];
+    }
+
+    // LoginProcess.php usa: id_usuario
+    if (!$idUsuario && !empty($_SESSION['id_usuario'])) {
+        $idUsuario = $_SESSION['id_usuario'];
+        $_SESSION['idUsuario'] = $idUsuario; // normalizar
+    }
+
+    // PASO 2: Si aun NO tenemos idUsuario, buscarlo por email
+    if (!$idUsuario && !empty($_SESSION['email'])) {
+
+        require_once '../models/Usuario.php';
+        $usuarioModel = new Usuario();
+        $usuario = $usuarioModel->obtenerPorEmail($_SESSION['email']);
+
+        if ($usuario) {
+            $idUsuario = $usuario['idUsuario']; 
+            $_SESSION['idUsuario'] = $idUsuario; // GUARDAR PARA QUE NO FALLE OTRA VEZ
+        }
+    }
+
+    // PASO 3: Validar resultado final
+    if (!$idUsuario) {
+        die("Error: No hay usuario en sesión.");
+    }
+
+    // Obtener el código del estudiante
+    $codigoEstudiante = $curso->obtenerCodigoEstudiante($idUsuario);
+
+    if (!$codigoEstudiante) {
+        die("No eres estudiante o no tienes código asignado.");
+    }
+
+    $idCurso = $_GET['id'];
+    $resultado = $curso->matricular($idCurso, $codigoEstudiante);
+
+    if ($resultado == "OK") {
+        header("Location: ../views/curso/listar.php?msg=matriculado");
+    } 
+    elseif ($resultado == "YA_MATRICULADO") {
+        header("Location: ../views/curso/listar.php?msg=ya");
+    } 
+    elseif ($resultado == "SIN_CUPO") {
+        header("Location: ../views/curso/listar.php?msg=sin_cupo");
+    } 
+    else {
+        header("Location: ../views/curso/listar.php?msg=error");
+    }
+
+    exit;
+}
+
+
+
+
+
 
 else {
     header("Location: ../views/curso/listar.php");

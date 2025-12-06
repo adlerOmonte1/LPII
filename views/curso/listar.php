@@ -1,4 +1,7 @@
 <?php
+
+session_start();   // ← NECESARIO
+
 require_once '../../models/Curso.php';
 $curso = new Curso();
 $resultado = $curso->listar();
@@ -36,42 +39,43 @@ if ($busqueda != "") {
 <body>
 <?php require_once("../layout/header.php"); ?>
 <div class="container mt-5">
-<div class="row align-items-center mb-3">
-    <div class="col-md-6">
-        <h2>
-            <span class="title-box">Listado de Cursos</span>
-        </h2>
-    <?php if ($_SESSION['perfil'] === 'administrador'): ?>
-        <a href="crear.php" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-1"></i> Añadir Nuevo Curso
-        </a>
-    <?php endif;?>
-    </div>
 
-    <div class="col-md-6">
-        <form action="listar.php" method="GET" class="d-flex justify-content-end">
+    <div class="row align-items-center mb-3">
+        <div class="col-md-6">
+            <h2>
+                <span class="title-box">Listado de Cursos</span>
+            </h2>
 
-            <input type="text" 
-                   class="form-control me-2"
-                   name="q"
-                   placeholder="Buscar curso..."
-                   style="max-width: 300px;"
-                   value="<?php echo htmlspecialchars($busqueda); ?>">
-
-            <button class="btn btn-outline-primary" type="submit">
-                <i class="bi bi-search"></i> Buscar
-            </button>
-
-            <?php if($busqueda != ""): ?>
-                <a href="listar.php" class="btn btn-outline-secondary ms-2">
-                    Limpiar
+            <?php if ($_SESSION['perfil'] === 'administrador'): ?>
+                <a href="crear.php" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i> Añadir Nuevo Curso
                 </a>
             <?php endif; ?>
+        </div>
 
-        </form>
+        <div class="col-md-6">
+            <form action="listar.php" method="GET" class="d-flex justify-content-end">
+
+                <input type="text" 
+                       class="form-control me-2"
+                       name="q"
+                       placeholder="Buscar curso..."
+                       style="max-width: 300px;"
+                       value="<?php echo htmlspecialchars($busqueda); ?>">
+
+                <button class="btn btn-outline-primary" type="submit">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+
+                <?php if ($busqueda != ""): ?>
+                    <a href="listar.php" class="btn btn-outline-secondary ms-2">
+                        Limpiar
+                    </a>
+                <?php endif; ?>
+
+            </form>
+        </div>
     </div>
-
-</div>
 
 
     <div class="table-responsive">
@@ -84,6 +88,10 @@ if ($busqueda != "") {
                     <th>Cupo</th>
                     <th>Inicio</th>
                     <th>Fin</th>
+                    <th>Nivel</th>
+                    <th>Idioma</th>
+                    <th>Aula</th>
+                    <th>Docente</th>
                     <th style="width: 160px;">Acciones</th>
                 </tr>
             </thead>
@@ -94,28 +102,43 @@ if ($busqueda != "") {
                 foreach ($resultado as $curso) {
             ?>
                 <tr>
-                    <td><?php echo $curso["idCurso"]; ?></td>
-                    <td><?php echo $curso["nombre"]; ?></td>
-                    <td><?php echo $curso["cupoMaximo"]; ?></td>
-                    <td><?php echo $curso["fechaInicio"]; ?></td>
-                    <td><?php echo $curso["fechaFin"]; ?></td>
+                    <td><?= $curso["idCurso"] ?></td>
+                    <td><?= $curso["nombre"] ?></td>
+                    <td><?= $curso["cupoMaximo"] ?></td>
+                    <td><?= $curso["fechaInicio"] ?></td>
+                    <td><?= $curso["fechaFin"] ?></td>
+                    <td><?= $curso["nivel"] ?></td>
+                    <td><?= $curso["idioma"] ?></td>
+                    <td><?= $curso["aula"] ?></td>
+                    <td><?= $curso["docente"] ?></td>
 
                     <td>
                         <?php if ($_SESSION['perfil'] === 'administrador'): ?>
-                        <a href="editar.php?id=<?php echo $curso['idCurso']; ?>" 
-                            class="btn btn-warning btn-sm">
-                            <i class="bi bi-pencil-square"></i> Editar
-                        </a>
-                        <a href="../../controllers/CursoController.php?action=eliminar&id=<?php echo $curso['idCurso']; ?>"
-                           class="btn btn-danger btn-sm"
-                           onclick="return confirm('¿Estás seguro de eliminar este curso?');">
-                            Eliminar
-                        </a>
-                        <?php else: ?>
-                                <span class="badge bg-secondary">Solo lectura</span>
-                        <?php endif;?>
 
+                            <a href="editar.php?id=<?= $curso['idCurso'] ?>" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </a>
+
+                            <a href="../../controllers/CursoController.php?action=eliminar&id=<?= $curso['idCurso'] ?>"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('¿Eliminar este curso?');">
+                                Eliminar
+                            </a>
+
+                        <?php elseif ($_SESSION['perfil'] === 'estudiante'): ?>
+
+                            <a href="/LPII/views/curso/matricula.php?id=<?= $curso['idCurso'] ?>"
+                            class="btn btn-success btn-sm">
+                                <i class="bi bi-journal-plus"></i> Matricularme
+                            </a>
+
+                        <?php else: ?>
+
+                            <span class="badge bg-secondary">Sin acciones</span>
+
+                        <?php endif; ?>
                     </td>
+
                 </tr>
             <?php
                 }
@@ -124,7 +147,6 @@ if ($busqueda != "") {
             </tbody>
 
         </table>
-
     </div>
 
 </div>
