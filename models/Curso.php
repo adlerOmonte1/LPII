@@ -244,7 +244,7 @@ public function obtenerDocentes() {
             ORDER BY u.apellidos ASC";
     $stmt = $this->conn->prepare($sql);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
 }
 
 
