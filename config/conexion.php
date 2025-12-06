@@ -11,7 +11,7 @@ class Conexion {
         string $host = "localhost",
         string $dbname = "InstitutoIdiomas",
         string $username = "root",
-        string $password = "75186833"
+        string $password = ""
     ) {
         $this->dsn = "mysql:host={$host};dbname={$dbname};charset=utf8mb4";
         $this->username = $username;
