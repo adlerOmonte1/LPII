@@ -32,7 +32,7 @@ if (!isset($_SESSION['email'])) {
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container">
 
-        <a class="navbar-brand fw-bold" href="#">
+        <a class="navbar-brand fw-bold" href="../login/bienvenida.php">
             <i class="bi bi-mortarboard-fill me-2"></i>Sistema Académico
         </a>
 
