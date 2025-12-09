@@ -48,6 +48,7 @@ if (!isset($_SESSION['email'])) {
                 <li class="nav-item"><a class="nav-link" href="../curso/listar.php">Cursos</a></li>
                 <li class="nav-item"><a class="nav-link" href="../curso/micursoest.php">Cursando </a></li>
                 <li class="nav-item"><a class="nav-link" href="../horario/listar.php">Horario</a></li>
+                <li class="nav-item"><a class="nav-link" href="../curso/mishorarios.php">Mis Horario</a></li>
 
             
 

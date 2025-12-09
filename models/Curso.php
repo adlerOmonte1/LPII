@@ -23,13 +23,33 @@ public function listar() {
                     n.nombre AS nivel,
                     i.nombre AS idioma,
                     a.nombre AS aula,
-                    CONCAT(u.apellidos, ', ', u.nombres) AS docente
+                    CONCAT(u.apellidos, ', ', u.nombres) AS docente,
+                    GROUP_CONCAT(
+                        CONCAT(
+                            h.diaSemana, ' ',
+                            DATE_FORMAT(h.horaInicio, '%H:%i'),
+                            ' - ',
+                            DATE_FORMAT(h.horaFin, '%H:%i')
+                        ) SEPARATOR ' / '
+                    ) AS horario
                 FROM Curso c
                 INNER JOIN Nivel n ON c.idNivel = n.idNivel
                 INNER JOIN Idioma i ON c.idIdioma = i.idIdioma
                 INNER JOIN Aula a ON c.idAula = a.idAula
                 INNER JOIN Docente d ON c.codigoDocente = d.codigoDocente
                 INNER JOIN Usuario u ON u.idUsuario = d.idUsuario
+                LEFT JOIN CursoHorario ch ON ch.idCurso = c.idCurso
+                LEFT JOIN Horario h ON h.idHorario = ch.idHorario
+                GROUP BY 
+                    c.idCurso,
+                    c.nombre,
+                    c.cupoMaximo,
+                    c.fechaInicio,
+                    c.fechaFin,
+                    n.nombre,
+                    i.nombre,
+                    a.nombre,
+                    docente
                 ORDER BY c.nombre ASC";
 
         $stmt = $this->conn->prepare($sql);
@@ -41,6 +61,7 @@ public function listar() {
         return [];
     }
 }
+
 
 public function obtenerCodigoEstudiante($idUsuario)
 {
@@ -109,25 +130,31 @@ public function matricular($idCurso, $codigoEstudiante)
 
  
     public function crear($nombre, $cupoMaximo, $fechaInicio, $fechaFin, $idNivel, $idIdioma, $idAula, $codigoDocente) {
-        try {
-            $sql = "INSERT INTO Curso (nombre, cupoMaximo, fechaInicio, fechaFin, idNivel, idIdioma, idAula, codigoDocente)
-                    VALUES (:nombre, :cupoMaximo, :fechaInicio, :fechaFin, :idNivel, :idIdioma, :idAula, :codigoDocente)";
-            $stmt = $this->conn->prepare($sql);
+    try {
+        $sql = "INSERT INTO Curso (nombre, cupoMaximo, fechaInicio, fechaFin, idNivel, idIdioma, idAula, codigoDocente)
+                VALUES (:nombre, :cupoMaximo, :fechaInicio, :fechaFin, :idNivel, :idIdioma, :idAula, :codigoDocente)";
+        $stmt = $this->conn->prepare($sql);
 
-            $stmt->bindParam(':nombre', $nombre);
-            $stmt->bindParam(':cupoMaximo', $cupoMaximo);
-            $stmt->bindParam(':fechaInicio', $fechaInicio);
-            $stmt->bindParam(':fechaFin', $fechaFin);
-            $stmt->bindParam(':idNivel', $idNivel);
-            $stmt->bindParam(':idIdioma', $idIdioma);
-            $stmt->bindParam(':idAula', $idAula);
-            $stmt->bindParam(':codigoDocente', $codigoDocente);
-            $stmt->execute();
-            return true;
-        } catch (Exception $e) {
-            echo "Error al crear: " . $e->getMessage();
-        }
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':cupoMaximo', $cupoMaximo);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->bindParam(':idNivel', $idNivel);
+        $stmt->bindParam(':idIdioma', $idIdioma);
+        $stmt->bindParam(':idAula', $idAula);
+        $stmt->bindParam(':codigoDocente', $codigoDocente);
+
+        $stmt->execute();
+
+        return $this->conn->lastInsertId();
+
+    } catch (Exception $e) {
+        echo "Error al crear: " . $e->getMessage();
+        return false;
     }
+}
+
+
 
 
     public function actualizar($idCurso, $nombre, $cupoMaximo, $fechaInicio, $fechaFin, $idNivel, $idIdioma, $idAula, $codigoDocente) {
@@ -153,23 +180,50 @@ public function matricular($idCurso, $codigoEstudiante)
             echo "Error al actualizar: " . $e->getMessage();
         }
     }
-   public function obtenerPorId($idCurso) {
+public function obtenerPorId($idCurso) {
     try {
 
-        $sql = "SELECT c.*, 
-                       n.nombre AS nivel, 
-                       i.nombre AS idioma, 
-                       a.nombre AS aula,
-                       d.codigoDocente, 
-                       u.nombres AS nombreDocente,
-                       u.apellidos AS apellidoDocente
+        $sql = "SELECT 
+                    c.*, 
+                    n.nombre AS nivel, 
+                    i.nombre AS idioma, 
+                    a.nombre AS aula,
+                    d.codigoDocente, 
+                    u.nombres AS nombreDocente,
+                    u.apellidos AS apellidoDocente,
+                    GROUP_CONCAT(
+                        CONCAT(
+                            h.diaSemana, ' ',
+                            DATE_FORMAT(h.horaInicio, '%H:%i'),
+                            ' - ',
+                            DATE_FORMAT(h.horaFin, '%H:%i')
+                        ) SEPARATOR ' / '
+                    ) AS horario
                 FROM Curso c
                 INNER JOIN Nivel n ON c.idNivel = n.idNivel
                 INNER JOIN Idioma i ON c.idIdioma = i.idIdioma
                 INNER JOIN Aula a ON c.idAula = a.idAula
                 INNER JOIN Docente d ON c.codigoDocente = d.codigoDocente
                 INNER JOIN Usuario u ON d.idUsuario = u.idUsuario
-                WHERE c.idCurso = :idCurso";
+                LEFT JOIN CursoHorario ch ON ch.idCurso = c.idCurso
+                LEFT JOIN Horario h ON h.idHorario = ch.idHorario
+                WHERE c.idCurso = :idCurso
+                GROUP BY 
+                    c.idCurso,
+                    c.nombre,
+                    c.cupoMaximo,
+                    c.fechaInicio,
+                    c.fechaFin,
+                    c.idNivel,
+                    c.idIdioma,
+                    c.idAula,
+                    c.codigoDocente,
+                    n.nombre,
+                    i.nombre,
+                    a.nombre,
+                    d.codigoDocente,
+                    u.nombres,
+                    u.apellidos";
 
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':idCurso', $idCurso);
@@ -184,6 +238,7 @@ public function matricular($idCurso, $codigoEstudiante)
         return null;
     }
 }
+
 
     public function obtenerNiveles() {
     $sql = "SELECT * FROM Nivel ORDER BY nombre ASC";
@@ -236,6 +291,42 @@ public function obtenerEstudiantesInscritos($idCurso){
 }
 
 
+public function obtenerHorariosIdsPorCurso($idCurso) {
+    $sql = "SELECT idHorario FROM CursoHorario WHERE idCurso = :idCurso";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':idCurso', $idCurso);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+
+public function actualizarHorariosDeCurso($idCurso, $horariosSeleccionados = []) {
+    try {
+        $sqlDelete = "DELETE FROM CursoHorario WHERE idCurso = :idCurso";
+        $stmtDelete = $this->conn->prepare($sqlDelete);
+        $stmtDelete->bindParam(':idCurso', $idCurso);
+        $stmtDelete->execute();
+
+        if (!empty($horariosSeleccionados)) {
+            $sqlInsert = "INSERT INTO CursoHorario (idCurso, idHorario) VALUES (:idCurso, :idHorario)";
+            $stmtInsert = $this->conn->prepare($sqlInsert);
+
+            foreach ($horariosSeleccionados as $idHorario) {
+                $stmtInsert->bindParam(':idCurso', $idCurso);
+                $stmtInsert->bindParam(':idHorario', $idHorario);
+                $stmtInsert->execute();
+            }
+        }
+
+        return true;
+
+    } catch (Exception $e) {
+        echo "Error al actualizar horarios del curso: " . $e->getMessage();
+        return false;
+    }
+}
+
+
 
 public function obtenerDocentes() {
     $sql = "SELECT d.codigoDocente, u.nombres, u.apellidos
@@ -264,12 +355,49 @@ public function obtenerDocentes() {
     public function buscar($texto)
 {
     try {
-$sql = "SELECT c.idCurso,c.nombre,c.cupoMaximo,c.fechaInicio,c.fechaFin,n.nombre AS nivel,i.nombre AS idioma,a.nombre AS aula,
-d.codigoDocente,u.nombres AS nombreDocente,u.apellidos AS apellidoDocente
-FROM Curso c INNER JOIN Nivel n ON c.idNivel = n.idNivel INNER JOIN Idioma i ON c.idIdioma = i.idIdioma
-INNER JOIN Aula a ON c.idAula = a.idAula INNER JOIN Docente d ON c.codigoDocente = d.codigoDocente INNER JOIN Usuario u ON d.idUsuario = u.idUsuario
-WHERE c.nombre LIKE ? OR n.nombre LIKE ? OR i.nombre LIKE ? OR a.nombre LIKE ? OR u.nombres LIKE ? OR u.apellidos LIKE ?
-ORDER BY c.nombre ASC";
+        $sql = "SELECT 
+                    c.idCurso,
+                    c.nombre,
+                    c.cupoMaximo,
+                    c.fechaInicio,
+                    c.fechaFin,
+                    n.nombre AS nivel,
+                    i.nombre AS idioma,
+                    a.nombre AS aula,
+                    CONCAT(u.apellidos, ', ', u.nombres) AS docente,
+                    GROUP_CONCAT(
+                        CONCAT(
+                            h.diaSemana, ' ',
+                            DATE_FORMAT(h.horaInicio, '%H:%i'),
+                            ' - ',
+                            DATE_FORMAT(h.horaFin, '%H:%i')
+                        ) SEPARATOR ' / '
+                    ) AS horario
+                FROM Curso c
+                INNER JOIN Nivel n ON c.idNivel = n.idNivel
+                INNER JOIN Idioma i ON c.idIdioma = i.idIdioma
+                INNER JOIN Aula a ON c.idAula = a.idAula
+                INNER JOIN Docente d ON c.codigoDocente = d.codigoDocente
+                INNER JOIN Usuario u ON d.idUsuario = u.idUsuario
+                LEFT JOIN CursoHorario ch ON ch.idCurso = c.idCurso
+                LEFT JOIN Horario h ON h.idHorario = ch.idHorario
+                WHERE c.nombre LIKE ? 
+                   OR n.nombre LIKE ? 
+                   OR i.nombre LIKE ? 
+                   OR a.nombre LIKE ? 
+                   OR u.nombres LIKE ? 
+                   OR u.apellidos LIKE ?
+                GROUP BY 
+                    c.idCurso,
+                    c.nombre,
+                    c.cupoMaximo,
+                    c.fechaInicio,
+                    c.fechaFin,
+                    n.nombre,
+                    i.nombre,
+                    a.nombre,
+                    docente
+                ORDER BY c.nombre ASC";
 
         $stmt = $this->conn->prepare($sql);
         $param = "%".$texto."%";
@@ -282,5 +410,6 @@ ORDER BY c.nombre ASC";
         return [];
     }
 }
+
 
 }

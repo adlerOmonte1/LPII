@@ -7,6 +7,7 @@ $curso = new Curso();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 if ($action == 'crear') {
+    $horariosSeleccionados = isset($_POST['horarios']) ? $_POST['horarios'] : [];
 
     $resultado = $curso->crear(
         nombre: $_POST["nombre"],
@@ -20,6 +21,7 @@ if ($action == 'crear') {
     );
 
     if($resultado){
+        $curso->actualizarHorariosDeCurso($resultado, $horariosSeleccionados);
         header("Location: ../views/curso/listar.php");
     }else{
         echo "Error al registrar curso";
@@ -28,6 +30,9 @@ if ($action == 'crear') {
 }
 
 elseif ($action == 'actualizar') {
+    $idCurso = $_POST["idCurso"];
+
+    $horariosSeleccionados = isset($_POST['horarios']) ? $_POST['horarios'] : [];
 
     $resultado = $curso->actualizar(
         idCurso: $_POST["idCurso"],
@@ -43,6 +48,7 @@ elseif ($action == 'actualizar') {
 
 
     if($resultado){
+        $curso->actualizarHorariosDeCurso($idCurso, $horariosSeleccionados);
         header("Location: ../views/curso/listar.php");
     }else{
         echo "Error al registrar curso";
