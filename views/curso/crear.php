@@ -1,12 +1,16 @@
 <?php
 require_once '../../models/Curso.php';
+require_once '../../models/Horario.php'; 
 
 $cursoModel = new Curso();
+$horarioModel = new Horario();    
 
 $niveles = $cursoModel->obtenerNiveles();
 $idiomas = $cursoModel->obtenerIdiomas();
 $aulas = $cursoModel->obtenerAulas();
 $docentes = $cursoModel->obtenerDocentes();
+
+$listaHorarios = $horarioModel->listar();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -75,6 +79,35 @@ $docentes = $cursoModel->obtenerDocentes();
 
                         <h5 class="text-primary mb-3 mt-4 border-bottom pb-2">Asignaciones</h5>
 
+<div class="mb-3">
+    <label class="form-label fw-bold">Horarios del curso</label>
+
+    <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto;">
+        <?php foreach ($listaHorarios as $h): ?>
+            <?php
+
+                $textoHorario = $h['diaSemana'] . ' ' . substr($h['horaInicio'], 0, 5) . ' - ' . substr($h['horaFin'], 0, 5);
+                $idH = $h['idHorario'];
+            ?>
+            <div class="form-check">
+                <input 
+                    class="form-check-input"
+                    type="checkbox"
+                    name="horarios[]"
+                    value="<?= $idH ?>"
+                    id="h<?= $idH ?>"
+                >
+                <label class="form-check-label" for="h<?= $idH ?>">
+                    <?= $textoHorario ?>
+                </label>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <small class="text-muted">
+        Marca los horarios en los que se dictará este curso.
+    </small>
+</div>
                     
                         <div class="mb-3">
                             <label class="form-label fw-bold">Nivel</label>
