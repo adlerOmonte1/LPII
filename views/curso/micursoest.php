@@ -1,0 +1,114 @@
+<?php
+
+session_start();  
+
+require_once '../../models/Curso.php';
+$idUsuario = $_SESSION['idUsuario'];
+$curso = new Curso();
+$resultado = $curso->obtenerCursosporIdEstudiante($idUsuario);
+
+$busqueda = isset($_GET["q"]) ? $_GET["q"] : "";
+
+if ($busqueda != "") {
+    $resultado = $curso->buscar($busqueda);
+} else {
+    $resultado = $curso->obtenerCursosporIdEstudiante($idUsuario);
+}
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Mis Cursos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        body { background-color: #f8f9fa; }
+        .title-box {
+            background-color: #e9ecef;
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+<?php require_once("../layout/header.php"); ?>
+<div class="container mt-5">
+
+    <div class="row align-items-center mb-3">
+        <div class="col-md-6">
+            <h2>
+                <span class="title-box">Listado de Mis Cursos</span>
+            </h2>
+
+        </div>
+
+        <div class="col-md-6">
+            <form  method="GET" class="d-flex justify-content-end">
+
+                <input type="text" 
+                       class="form-control me-2"
+                       name="q"
+                       placeholder="Buscar curso..."
+                       style="max-width: 300px;"
+                       value="<?php echo htmlspecialchars($busqueda); ?>">
+
+                <button class="btn btn-outline-primary" type="submit">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+
+                <?php if ($busqueda != ""): ?>
+                    <a href="micursoest.php" class="btn btn-outline-secondary ms-2">
+                        Limpiar
+                    </a>
+                <?php endif; ?>
+
+            </form>
+        </div>
+    </div>
+
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                    
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php if ($resultado): ?>
+                    <?php foreach ($resultado as $curso): ?>
+                        <tr>
+                            <td><?= $curso["idCurso"] ?></td>
+                            <td><?= $curso["nombre"] ?></td>
+                            <td><?= $curso["fechaInicio"] ?></td>
+                            <td><?= $curso["fechaFin"] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+<script>
+    // Fíjate en las comillas dobles "..." envolviendo el código PHP
+    console.log("El ID es: " + "<?php echo $_SESSION['idUsuario']; ?>");
+</script>

@@ -4,7 +4,6 @@ require_once '../../models/Curso.php';
 
 $cursoModel = new Curso();
 
-// Validar que venga un ID
 if (!isset($_GET['id'])) {
     header("Location: listar.php");
     exit;

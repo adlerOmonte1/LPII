@@ -66,4 +66,34 @@ class Horario {
             echo "Error al eliminar: " . $e->getMessage();
         }
     }
+
+     public function obtenerHorariosPorEstudiante($idUsuario) {
+        $sql = "SELECT 
+                    cu.nombre AS curso,
+                    cu.fechaInicio,
+                    cu.fechaFin,
+                    i.nombre AS idioma,
+                    n.nombre AS nivel,
+                    a.nombre AS aula,
+                    h.diaSemana,
+                    h.horaInicio,
+                    h.horaFin
+                FROM Matricula m
+                INNER JOIN Estudiante e ON m.codigoEstudiante = e.codigoEstudiante
+                INNER JOIN Usuario u ON e.idUsuario = u.idUsuario
+                INNER JOIN Curso cu ON m.idCurso = cu.idCurso
+                INNER JOIN CursoHorario ch ON cu.idCurso = ch.idCurso
+                INNER JOIN Horario h ON ch.idHorario = h.idHorario
+                INNER JOIN Idioma i ON cu.idIdioma = i.idIdioma
+                INNER JOIN Nivel n ON cu.idNivel = n.idNivel
+                INNER JOIN Aula a ON cu.idAula = a.idAula
+                WHERE u.idUsuario = :idUsuario
+                ORDER BY h.diaSemana, h.horaInicio";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

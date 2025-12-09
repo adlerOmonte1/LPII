@@ -7,6 +7,7 @@ $curso = new Curso();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 if ($action == 'crear') {
+    $horariosSeleccionados = isset($_POST['horarios']) ? $_POST['horarios'] : [];
 
     $resultado = $curso->crear(
         nombre: $_POST["nombre"],
@@ -20,6 +21,7 @@ if ($action == 'crear') {
     );
 
     if($resultado){
+        $curso->actualizarHorariosDeCurso($resultado, $horariosSeleccionados);
         header("Location: ../views/curso/listar.php");
     }else{
         echo "Error al registrar curso";
@@ -28,6 +30,9 @@ if ($action == 'crear') {
 }
 
 elseif ($action == 'actualizar') {
+    $idCurso = $_POST["idCurso"];
+
+    $horariosSeleccionados = isset($_POST['horarios']) ? $_POST['horarios'] : [];
 
     $resultado = $curso->actualizar(
         idCurso: $_POST["idCurso"],
@@ -43,6 +48,7 @@ elseif ($action == 'actualizar') {
 
 
     if($resultado){
+        $curso->actualizarHorariosDeCurso($idCurso, $horariosSeleccionados);
         header("Location: ../views/curso/listar.php");
     }else{
         echo "Error al registrar curso";
@@ -64,23 +70,17 @@ elseif ($action == 'eliminar') {
 }
 elseif ($action == 'matricular') {
 
-    // Ya existe session_start arriba
-
-    // PASO 1: Intentar obtener el ID usando las variables del login
     $idUsuario = null;
 
-    // LoginController.php usa: idUsuario
     if (!empty($_SESSION['idUsuario'])) {
         $idUsuario = $_SESSION['idUsuario'];
     }
 
-    // LoginProcess.php usa: id_usuario
     if (!$idUsuario && !empty($_SESSION['id_usuario'])) {
         $idUsuario = $_SESSION['id_usuario'];
-        $_SESSION['idUsuario'] = $idUsuario; // normalizar
+        $_SESSION['idUsuario'] = $idUsuario; 
     }
 
-    // PASO 2: Si aun NO tenemos idUsuario, buscarlo por email
     if (!$idUsuario && !empty($_SESSION['email'])) {
 
         require_once '../models/Usuario.php';
@@ -89,16 +89,14 @@ elseif ($action == 'matricular') {
 
         if ($usuario) {
             $idUsuario = $usuario['idUsuario']; 
-            $_SESSION['idUsuario'] = $idUsuario; // GUARDAR PARA QUE NO FALLE OTRA VEZ
+            $_SESSION['idUsuario'] = $idUsuario; 
         }
     }
 
-    // PASO 3: Validar resultado final
     if (!$idUsuario) {
         die("Error: No hay usuario en sesión.");
     }
 
-    // Obtener el código del estudiante
     $codigoEstudiante = $curso->obtenerCodigoEstudiante($idUsuario);
 
     if (!$codigoEstudiante) {
@@ -123,11 +121,6 @@ elseif ($action == 'matricular') {
 
     exit;
 }
-
-
-
-
-
 
 else {
     header("Location: ../views/curso/listar.php");

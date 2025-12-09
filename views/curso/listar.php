@@ -1,6 +1,6 @@
 <?php
 
-session_start();   // ← NECESARIO
+session_start();  
 
 require_once '../../models/Curso.php';
 $curso = new Curso();
@@ -90,6 +90,7 @@ if ($busqueda != "") {
                     <th>Fin</th>
                     <th>Nivel</th>
                     <th>Idioma</th>
+                    <th>Horario</th>
                     <th>Aula</th>
                     <th>Docente</th>
                     <th style="width: 160px;">Acciones</th>
@@ -110,6 +111,7 @@ if ($busqueda != "") {
                     <td><?= $curso["nivel"] ?></td>
                     <td><?= $curso["idioma"] ?></td>
                     <td><?= $curso["aula"] ?></td>
+                    <td><?= $curso["horario"] ?></td>
                     <td><?= $curso["docente"] ?></td>
 
                     <td>
