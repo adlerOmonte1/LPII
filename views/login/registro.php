@@ -51,7 +51,7 @@
         </form>
 
         <div class="text-center mt-3">
-            <a href="login.php">Volver al login</a>
+            <a href="login.php" class="text-decoration-none">Volver al login</a>
         </div>
 
     </div>

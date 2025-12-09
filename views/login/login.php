@@ -28,6 +28,17 @@
                     <label class="form-label">Contraseña</label>
                     <input type="password" name="password" class="form-control" required>
                 </div>
+                    <?php if (isset($_GET['error']) && $_GET['error'] === 'credenciales'): ?>
+                        <div class="text-danger mt-2 mb-2 ">
+                            Email o contraseña incorrectos
+                        </div>
+                        <script>
+                            if (window.location.search.includes('error')) {
+                                window.history.replaceState({}, document.title, window.location.pathname);
+                            }
+                        </script>
+
+                    <?php endif; ?>
 
                 <button type="submit" class="btn btn-primary w-100">
                     Ingresar

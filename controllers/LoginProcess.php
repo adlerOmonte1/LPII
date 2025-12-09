@@ -23,6 +23,6 @@ if ($data) {
     exit();
 
 } else {
-    header("Location: ../views/login/login.php?error=1");
+    header("Location: ../views/login/login.php?error=credenciales");
     exit();
 }
