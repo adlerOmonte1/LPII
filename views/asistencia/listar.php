@@ -7,7 +7,7 @@ $busqueda = isset($_GET['q']) ? $_GET['q'] : "";
 if($busqueda != ""){
     $resultado = $asistenciaModel->buscar($busqueda);
 } else {
-    $resultado = $asistenciaModel->listar();
+    $resultado = $asistenciaModel->listar(); // Ahora listar() evita duplicados por estudiante y fecha
 }
 ?>
 

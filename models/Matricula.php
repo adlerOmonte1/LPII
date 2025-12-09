@@ -11,87 +11,87 @@ class Matricula {
 
     public function listar() {
         try {
-            $sql = "SELECT m.idMatricula, m.fechaMatricula, m.estado, c.nombre AS curso, 
-                           e.codigoEstudiante, u.nombres, u.apellidos
+            $sql = "SELECT m.idMatricula, m.idCurso, e.idUsuario, u.nombres, u.apellidos, e.codigoEstudiante, c.nombre AS curso
                     FROM Matricula m
-                    INNER JOIN Curso c ON m.idCurso = c.idCurso
                     INNER JOIN Estudiante e ON m.codigoEstudiante = e.codigoEstudiante
                     INNER JOIN Usuario u ON e.idUsuario = u.idUsuario
-                    ORDER BY m.fechaMatricula DESC";
+                    INNER JOIN Curso c ON m.idCurso = c.idCurso
+                    ORDER BY c.nombre, u.apellidos, u.nombres";
+
             $stmt = $this->conn->query($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch(Exception $e){
-            echo "Error al listar: ".$e->getMessage();
+
+        } catch (Exception $e) {
+            echo "Error al listar matrículas: " . $e->getMessage();
             return [];
         }
     }
 
-    public function crear($fechaMatricula, $estado, $idCurso, $codigoEstudiante) {
+    public function listarPorCurso($idCurso) {
         try {
-            $sql = "INSERT INTO Matricula (fechaMatricula, estado, idCurso, codigoEstudiante)
-                    VALUES (:fechaMatricula, :estado, :idCurso, :codigoEstudiante)";
+            $sql = "SELECT m.idMatricula, m.idCurso, e.idUsuario, u.nombres, u.apellidos, e.codigoEstudiante
+                    FROM Matricula m
+                    INNER JOIN Estudiante e ON m.codigoEstudiante = e.codigoEstudiante
+                    INNER JOIN Usuario u ON e.idUsuario = u.idUsuario
+                    WHERE m.idCurso = :idCurso
+                    ORDER BY u.apellidos, u.nombres";
+
             $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam(':fechaMatricula', $fechaMatricula);
-            $stmt->bindParam(':estado', $estado);
             $stmt->bindParam(':idCurso', $idCurso);
-            $stmt->bindParam(':codigoEstudiante', $codigoEstudiante);
             $stmt->execute();
-            return true;
-        } catch(Exception $e) {
-            echo "Error al crear: ".$e->getMessage();
-            return false;
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Exception $e) {
+            echo "Error al listar matrículas por curso: " . $e->getMessage();
+            return [];
         }
     }
 
-    public function actualizar($idMatricula, $fechaMatricula, $estado, $idCurso, $codigoEstudiante) {
+    public function obtener($idMatricula) {
         try {
-            $sql = "UPDATE Matricula SET fechaMatricula=:fechaMatricula, estado=:estado, 
-                    idCurso=:idCurso, codigoEstudiante=:codigoEstudiante
-                    WHERE idMatricula=:idMatricula";
+            $sql = "SELECT m.idMatricula, m.idCurso, e.idUsuario, u.nombres, u.apellidos, e.codigoEstudiante
+                    FROM Matricula m
+                    INNER JOIN Estudiante e ON m.codigoEstudiante = e.codigoEstudiante
+                    INNER JOIN Usuario u ON e.idUsuario = u.idUsuario
+                    WHERE m.idMatricula = :idMatricula";
+
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':idMatricula', $idMatricula);
-            $stmt->bindParam(':fechaMatricula', $fechaMatricula);
-            $stmt->bindParam(':estado', $estado);
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+
+        } catch (Exception $e) {
+            echo "Error al obtener matrícula: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    public function crear($idCurso, $codigoEstudiante) {
+        try {
+            $sql = "INSERT INTO Matricula (idCurso, codigoEstudiante) VALUES (:idCurso, :codigoEstudiante)";
+            $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':idCurso', $idCurso);
             $stmt->bindParam(':codigoEstudiante', $codigoEstudiante);
             $stmt->execute();
             return true;
-        } catch(Exception $e){
-            echo "Error al actualizar: ".$e->getMessage();
+        } catch (Exception $e) {
+            echo "Error al crear matrícula: " . $e->getMessage();
             return false;
         }
     }
 
     public function eliminar($idMatricula) {
         try {
-            $sql = "DELETE FROM Matricula WHERE idMatricula=:idMatricula";
+            $sql = "DELETE FROM Matricula WHERE idMatricula = :idMatricula";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':idMatricula', $idMatricula);
             $stmt->execute();
             return true;
-        } catch(Exception $e){
-            echo "Error al eliminar: ".$e->getMessage();
+        } catch (Exception $e) {
+            echo "Error al eliminar matrícula: " . $e->getMessage();
             return false;
-        }
-    }
-
-    public function buscar($texto) {
-        try {
-            $sql = "SELECT m.idMatricula, m.fechaMatricula, m.estado, c.nombre AS curso, 
-                           e.codigoEstudiante, u.nombres, u.apellidos
-                    FROM Matricula m
-                    INNER JOIN Curso c ON m.idCurso = c.idCurso
-                    INNER JOIN Estudiante e ON m.codigoEstudiante = e.codigoEstudiante
-                    INNER JOIN Usuario u ON e.idUsuario = u.idUsuario
-                    WHERE c.nombre LIKE ? OR u.nombres LIKE ? OR u.apellidos LIKE ?
-                    ORDER BY m.fechaMatricula DESC";
-            $stmt = $this->conn->prepare($sql);
-            $param = "%".$texto."%";
-            $stmt->execute([$param, $param, $param]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch(Exception $e){
-            echo "Error al buscar: ".$e->getMessage();
-            return [];
         }
     }
 }

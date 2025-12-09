@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// 🚨 Protección global: si no hay sesión, manda a login
+// Protección global
 if (!isset($_SESSION['email'])) {
     header("Location: ../login/login.php");
     exit();
@@ -21,9 +21,7 @@ if (!isset($_SESSION['email'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
-        body {
-            background: #f8f9fa;
-        }
+        body { background: #f8f9fa; }
     </style>
 </head>
 
@@ -44,17 +42,17 @@ if (!isset($_SESSION['email'])) {
 
             <ul class="navbar-nav mx-auto">
 
-                <!-- MENU COMÚN (todos lo ven) -->
+                <!-- MENU ESTUDIANTE -->
                 <?php if ($_SESSION["perfil"] === "estudiante"): ?>
-                <li class="nav-item"><a class="nav-link" href="../curso/listar.php">Cursos</a></li>
-                <li class="nav-item"><a class="nav-link" href="../curso/micursoest.php">Cursando </a></li>
-                <li class="nav-item"><a class="nav-link" href="../horario/listar.php">Horario</a></li>
-                <li class="nav-item"><a class="nav-link" href="../curso/mishorarios.php">Mis Horario</a></li>
-                <li class="nav-item"><a class="nav-link" href="../docente/listar.php">Docentes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../curso/listar.php">Cursos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../curso/micursoest.php">Cursando</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../horario/listar.php">Horario</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../curso/mishorarios.php">Mis Horarios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../asistencia/miAsistencias.php">Mis Asistencias</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../docente/listar.php">Docentes</a></li>
                 <?php endif; ?>
-                            
 
-                <!-- MENU COMPLETO SOLO PARA ADMIN Y DOCENTE -->
+                <!-- MENU ADMIN -->
                 <?php if ($_SESSION["perfil"] === "administrador"): ?>
                     <li class="nav-item"><a class="nav-link" href="../curso/listar.php">Cursos</a></li>
                     <li class="nav-item"><a class="nav-link" href="../estudiante/listar.php">Estudiantes</a></li>
@@ -63,22 +61,20 @@ if (!isset($_SESSION['email'])) {
                     <li class="nav-item"><a class="nav-link" href="../matricula/listar.php">Matrículas</a></li>
                     <li class="nav-item"><a class="nav-link" href="../asistencia/listar.php">Asistencias</a></li>
                     <li class="nav-item"><a class="nav-link" href="../nivel/listar.php">Niveles</a></li>
-
                 <?php endif; ?>
 
+                <!-- MENU DOCENTE -->
                 <?php if ($_SESSION["perfil"] === "docente"): ?>
                     <li class="nav-item"><a class="nav-link" href="../curso/listar.php">Cursos</a></li>
                     <li class="nav-item"><a class="nav-link" href="../docente/listar.php">Docentes</a></li>
                     <li class="nav-item"><a class="nav-link" href="../curso/micurso.php">Cursos Asignados</a></li>
                     <li class="nav-item"><a class="nav-link" href="../idioma/listar.php">Idiomas</a></li>
                     <li class="nav-item"><a class="nav-link" href="../asistencia/listar.php">Asistencias</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../asistencia/controlAsistencia.php">Control Asistencia</a></li>
                     <li class="nav-item"><a class="nav-link" href="../nivel/listar.php">Niveles</a></li>
-
                 <?php endif; ?>
 
-
             </ul>
-
 
             <div class="d-flex align-items-center">
                 <span class="text-light small me-3">
