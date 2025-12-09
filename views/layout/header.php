@@ -45,18 +45,21 @@ if (!isset($_SESSION['email'])) {
             <ul class="navbar-nav mx-auto">
 
                 <!-- MENU COMÚN (todos lo ven) -->
+                 <?php if ($_SESSION["perfil"] === "estudiante"): ?>
                 <li class="nav-item"><a class="nav-link" href="../curso/listar.php">Cursos</a></li>
                 <li class="nav-item"><a class="nav-link" href="../curso/micursoest.php">Cursando </a></li>
                 <li class="nav-item"><a class="nav-link" href="../horario/listar.php">Horario</a></li>
                 <li class="nav-item"><a class="nav-link" href="../curso/mishorarios.php">Mis Horario</a></li>
 
+                <li class="nav-item"><a class="nav-link" href="../docente/listar.php">Docentes</a></li>
+                <?php endif; ?>
             
 
                 <!-- MENU COMPLETO SOLO PARA ADMIN Y DOCENTE -->
-                <?php if ($_SESSION["perfil"] === "administrador" || $_SESSION["perfil"] === "docente"): ?>
+                <?php if ($_SESSION["perfil"] === "administrador"): ?>
+                    <li class="nav-item"><a class="nav-link" href="../curso/listar.php">Cursos</a></li>
                     <li class="nav-item"><a class="nav-link" href="../estudiante/listar.php">Estudiantes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../curso/micurso.php">Cursos Asignados</a></li>
-
+                    <li class="nav-item"><a class="nav-link" href="../docente/listar.php">Docentes</a></li>
                     <li class="nav-item"><a class="nav-link" href="../idioma/listar.php">Idiomas</a></li>
                     <li class="nav-item"><a class="nav-link" href="../matricula/listar.php">Matrículas</a></li>
                     <li class="nav-item"><a class="nav-link" href="../asistencia/listar.php">Asistencias</a></li>
@@ -64,6 +67,15 @@ if (!isset($_SESSION['email'])) {
 
                 <?php endif; ?>
 
+                <?php if ($_SESSION["perfil"] === "docente"): ?>
+                    <li class="nav-item"><a class="nav-link" href="../curso/listar.php">Cursos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../docente/listar.php">Docentes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../curso/micurso.php">Cursos Asignados</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../idioma/listar.php">Idiomas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../asistencia/listar.php">Asistencias</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../nivel/listar.php">Niveles</a></li>
+
+                <?php endif; ?>
             </ul>
 
 

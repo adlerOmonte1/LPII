@@ -129,7 +129,7 @@ if ($busqueda != "") {
 
                         <?php elseif ($_SESSION['perfil'] === 'estudiante'): ?>
 
-                            <a href="/LPII/views/curso/matricula.php?id=<?= $curso['idCurso'] ?>"
+                            <a href="/views/curso/matricula.php?id=<?= $curso['idCurso'] ?>"
                             class="btn btn-success btn-sm">
                                 <i class="bi bi-journal-plus"></i> Matricularme
                             </a>
