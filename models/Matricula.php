@@ -11,7 +11,8 @@ class Matricula {
 
     public function listar() {
         try {
-            $sql = "SELECT m.idMatricula, m.idCurso, e.idUsuario, u.nombres, u.apellidos, e.codigoEstudiante, c.nombre AS curso
+            $sql = "SELECT m.idMatricula, m.idCurso, m.fechaMatricula, m.estado,
+                           e.idUsuario, u.nombres, u.apellidos, e.codigoEstudiante, c.nombre AS curso
                     FROM Matricula m
                     INNER JOIN Estudiante e ON m.codigoEstudiante = e.codigoEstudiante
                     INNER JOIN Usuario u ON e.idUsuario = u.idUsuario
@@ -29,7 +30,8 @@ class Matricula {
 
     public function listarPorCurso($idCurso) {
         try {
-            $sql = "SELECT m.idMatricula, m.idCurso, e.idUsuario, u.nombres, u.apellidos, e.codigoEstudiante
+            $sql = "SELECT m.idMatricula, m.idCurso, m.fechaMatricula, m.estado,
+                           e.idUsuario, u.nombres, u.apellidos, e.codigoEstudiante
                     FROM Matricula m
                     INNER JOIN Estudiante e ON m.codigoEstudiante = e.codigoEstudiante
                     INNER JOIN Usuario u ON e.idUsuario = u.idUsuario
@@ -50,7 +52,8 @@ class Matricula {
 
     public function obtener($idMatricula) {
         try {
-            $sql = "SELECT m.idMatricula, m.idCurso, e.idUsuario, u.nombres, u.apellidos, e.codigoEstudiante
+            $sql = "SELECT m.idMatricula, m.idCurso, m.fechaMatricula, m.estado,
+                           e.idUsuario, u.nombres, u.apellidos, e.codigoEstudiante
                     FROM Matricula m
                     INNER JOIN Estudiante e ON m.codigoEstudiante = e.codigoEstudiante
                     INNER JOIN Usuario u ON e.idUsuario = u.idUsuario
@@ -70,10 +73,16 @@ class Matricula {
 
     public function crear($idCurso, $codigoEstudiante) {
         try {
-            $sql = "INSERT INTO Matricula (idCurso, codigoEstudiante) VALUES (:idCurso, :codigoEstudiante)";
+            $fechaMatricula = date('Y-m-d');
+            $estado = 'Activo';
+
+            $sql = "INSERT INTO Matricula (idCurso, codigoEstudiante, fechaMatricula, estado) 
+                    VALUES (:idCurso, :codigoEstudiante, :fechaMatricula, :estado)";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':idCurso', $idCurso);
             $stmt->bindParam(':codigoEstudiante', $codigoEstudiante);
+            $stmt->bindParam(':fechaMatricula', $fechaMatricula);
+            $stmt->bindParam(':estado', $estado);
             $stmt->execute();
             return true;
         } catch (Exception $e) {
@@ -82,12 +91,38 @@ class Matricula {
         }
     }
 
-    public function eliminar($idMatricula) {
+    public function actualizar($idMatricula, $idCurso, $codigoEstudiante, $fechaMatricula, $estado) {
         try {
-            $sql = "DELETE FROM Matricula WHERE idMatricula = :idMatricula";
+            $sql = "UPDATE Matricula 
+                    SET idCurso = :idCurso, codigoEstudiante = :codigoEstudiante, 
+                        fechaMatricula = :fechaMatricula, estado = :estado
+                    WHERE idMatricula = :idMatricula";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':idMatricula', $idMatricula);
+            $stmt->bindParam(':idCurso', $idCurso);
+            $stmt->bindParam(':codigoEstudiante', $codigoEstudiante);
+            $stmt->bindParam(':fechaMatricula', $fechaMatricula);
+            $stmt->bindParam(':estado', $estado);
             $stmt->execute();
+            return true;
+        } catch (Exception $e) {
+            echo "Error al actualizar matrícula: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    public function eliminar($idMatricula) {
+        try {
+            $sql1 = "DELETE FROM Asistencia WHERE idMatricula = :idMatricula";
+            $stmt1 = $this->conn->prepare($sql1);
+            $stmt1->bindParam(':idMatricula', $idMatricula);
+            $stmt1->execute();
+
+            $sql2 = "DELETE FROM Matricula WHERE idMatricula = :idMatricula";
+            $stmt2 = $this->conn->prepare($sql2);
+            $stmt2->bindParam(':idMatricula', $idMatricula);
+            $stmt2->execute();
+
             return true;
         } catch (Exception $e) {
             echo "Error al eliminar matrícula: " . $e->getMessage();
