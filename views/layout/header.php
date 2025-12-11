@@ -59,6 +59,7 @@ if (!isset($_SESSION['email'])) {
                     <li class="nav-item"><a class="nav-link" href="../idioma/listar.php">Idiomas</a></li>
                     <li class="nav-item"><a class="nav-link" href="../matricula/listar.php">Matrículas</a></li>
                     <li class="nav-item"><a class="nav-link" href="../asistencia/listar.php">Asistencias</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../horario/listar.php">Horario</a></li>
                     <li class="nav-item"><a class="nav-link" href="../nivel/listar.php">Niveles</a></li>
                 <?php endif; ?>
 
