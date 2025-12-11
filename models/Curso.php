@@ -337,18 +337,6 @@ public function obtenerDocentes() {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_OBJ);
 }
-
-public function obtenerCursosporIdDocente($idUsuario){
-    $sql = "SELECT idCurso, nombre, fechaInicio,fechaFin FROM curso cu JOIN docente do 
-    on do.codigoDocente=cu.codigoDocente  WHERE do.idusuario=:idusuario";
-    $stmt = $this->conn->prepare($sql);
-    $stmt->bindParam(':idusuario',$idUsuario);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-
-
     public function eliminar($idCurso) {
         try {
             $sql = "DELETE FROM Curso WHERE idCurso = :idCurso";
