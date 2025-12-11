@@ -7,6 +7,7 @@ class Conexion {
     private $options;
     private $conexion;
 
+    
     public function __construct(
         string $host = "localhost",
         string $dbname = "InstitutoIdiomas",
