@@ -47,14 +47,6 @@ if ($busqueda != "") {
                 <span class="title-box">Listado de Mis Cursos</span>
             </h2>
 
-<<<<<<< HEAD
-            <?php if ($_SESSION['perfil'] === 'administrador'): ?>
-                <a href="crear.php" class="btn btn-primary">
-                    <i class="bi bi-plus-circle me-1"></i>prueba
-                </a>
-            <?php endif; ?>
-=======
->>>>>>> e7e3f90fd8c134ac7651d2d4a798c6123d23c40a
         </div>
 
         <div class="col-md-6">
@@ -72,11 +64,7 @@ if ($busqueda != "") {
                 </button>
 
                 <?php if ($busqueda != ""): ?>
-<<<<<<< HEAD
-                    <a href="listar.php" class="btn btn-outline-secondary ms-2">
-=======
                     <a href="micurso.php" class="btn btn-outline-secondary ms-2">
->>>>>>> e7e3f90fd8c134ac7651d2d4a798c6123d23c40a
                         Limpiar
                     </a>
                 <?php endif; ?>
@@ -111,37 +99,10 @@ if ($busqueda != "") {
                     <td><?= $curso["fechaFin"] ?></td>
 
                     <td>
-<<<<<<< HEAD
-                        <?php if ($_SESSION['perfil'] === 'administrador'): ?>
-
-                            <a href="editar.php?id=<?= $curso['idCurso'] ?>" class="btn btn-warning btn-sm">
-                                <i class="bi bi-pencil-square"></i> Editar
-                            </a>
-
-                            <a href="../../controllers/CursoController.php?action=eliminar&id=<?= $curso['idCurso'] ?>"
-                            class="btn btn-danger btn-sm"
-                            onclick="return confirm('¿Eliminar este curso?');">
-                                Eliminar
-                            </a>
-
-                        <?php elseif ($_SESSION['perfil'] === 'estudiante'): ?>
-
-                            <a href="/LPII/views/curso/matricula.php?id=<?= $curso['idCurso'] ?>"
-                            class="btn btn-success btn-sm">
-                                <i class="bi bi-journal-plus"></i> Matricularme
-                            </a>
-
-                        <?php else: ?>
-
-                            <span class="badge bg-secondary">Sin acciones</span>
-
-                        <?php endif; ?>
-=======
                             <a href="estudiantes.php?id=<?= $curso['idCurso'] ?>" class="btn btn-primary btn-sm">
                                 <i class="bi "></i> Listar Estudiantes
                             </a>
                         
->>>>>>> e7e3f90fd8c134ac7651d2d4a798c6123d23c40a
                     </td>
 
                 </tr>
