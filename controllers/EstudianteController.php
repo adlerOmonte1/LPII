@@ -4,12 +4,7 @@ require_once '../models/Estudiante.php';
 $action = $_REQUEST['action'] ?? ''; 
 $estudiante = new Estudiante();
 
-// Ruta de redirección base
 $redirect = "../views/estudiante/listar.php";
-
-// ---------------------------
-// 1. CREAR ESTUDIANTE
-// ---------------------------
 if ($action == 'crear') {
 
     $resultado = $estudiante->crear(
@@ -26,10 +21,6 @@ if ($action == 'crear') {
         echo "Error al registrar estudiante";
     }
 
-
-// ---------------------------
-// 2. ACTUALIZAR ESTUDIANTE
-// ---------------------------
 } elseif ($action == 'actualizar') {
 
     $resultado = $estudiante->actualizar(
@@ -46,10 +37,6 @@ if ($action == 'crear') {
         echo "Error al editar estudiante";
     }
 
-
-// ---------------------------
-// 3. ELIMINAR ESTUDIANTE
-// ---------------------------
 } elseif ($action == 'eliminar') {
 
     $codigo = $_GET['codigo'] ?? null;

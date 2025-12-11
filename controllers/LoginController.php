@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../models/Usuario.php";
+require_once __DIR__ . "/../models/Estudiante.php";
 
 class LoginController {
 
@@ -20,7 +21,6 @@ class LoginController {
 
             $passwordDB = $usuario["contraseña"];
 
-            // Verificar contraseña hasheada
             if (password_verify($pass, $passwordDB)) {
 
                 session_start();
@@ -29,8 +29,16 @@ class LoginController {
                 $_SESSION["apellidos"] = $usuario["apellidos"];
                 $_SESSION["perfil"]    = $usuario["perfil"];
 
+                $estudianteModel = new Estudiante();
+                $est = $estudianteModel->obtenerPorUsuario($usuario["idUsuario"]);
+
+                if ($est) {
+                    $_SESSION["codigoEstudiante"] = $est["codigoEstudiante"];
+                }
+
                 header("Location: ../views/login/bienvenida.php");
                 exit;
+
             } else {
                 echo "Usuario y/o contraseña incorrectos.";
             }

@@ -7,10 +7,8 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 if ($action == 'crear') {
     $resultado = $matricula->crear(
-        fechaMatricula: $_POST["fechaMatricula"],
-        estado: $_POST["estado"],
-        idCurso: $_POST["idCurso"],
-        codigoEstudiante: $_POST["codigoEstudiante"]
+        $_POST["idCurso"],
+        $_POST["codigoEstudiante"]
     );
 
     if($resultado){
@@ -22,11 +20,9 @@ if ($action == 'crear') {
 
 elseif ($action == 'actualizar') {
     $resultado = $matricula->actualizar(
-        idMatricula: $_POST["idMatricula"],
-        fechaMatricula: $_POST["fechaMatricula"],
-        estado: $_POST["estado"],
-        idCurso: $_POST["idCurso"],
-        codigoEstudiante: $_POST["codigoEstudiante"]
+        $_POST["idMatricula"],
+        $_POST["idCurso"],
+        $_POST["codigoEstudiante"]
     );
 
     if($resultado){
