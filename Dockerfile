@@ -6,6 +6,7 @@ RUN apt-get update \
     && docker-php-ext-install pdo pdo_pgsql \
     && rm -rf /var/lib/apt/lists/*
 
+RUN echo "output_buffering = 4096" > /usr/local/etc/php/conf.d/buffering.ini
 # Copiar la aplicación al document root de Apache
 COPY . /var/www/html/
 
