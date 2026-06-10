@@ -116,7 +116,7 @@ LPII/
 
 1. Clona el repositorio:
    ```bash
-   git clone <URL-del-repo>
+   git clone https://github.com/adlerOmonte1/LPII.git
    cd LPII
    ```
 2. Crea tu archivo de entorno:
