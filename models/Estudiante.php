@@ -164,7 +164,7 @@ class Estudiante
             $sql = "SELECT e.codigoEstudiante, u.idUsuario, u.nombres, u.apellidos, u.email
                     FROM Estudiante e
                     INNER JOIN Usuario u ON e.idUsuario = u.idUsuario
-                    WHERE u.nombres LIKE ? OR u.apellidos LIKE ? OR u.email LIKE ?";
+                    WHERE u.nombres ILIKE ? OR u.apellidos ILIKE ? OR u.email ILIKE ?";
             $stmt = $this->conn->prepare($sql);
             $parametro = "%" . $texto . "%";
             $stmt->execute([$parametro, $parametro, $parametro]);

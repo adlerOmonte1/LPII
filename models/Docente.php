@@ -104,8 +104,8 @@ class Docente{
     public function buscar($texto){
         try{
             $sql="SELECT u.idUsuario, u.nombres, u.apellidos, u.email, d.especialidad FROM Docente d 
-                INNER JOIN Usuario u ON d.idUsuario = u.idUsuario WHERE nombres LIKE ? 
-                OR apellidos LIKE ? OR especialidad LIKE ?";
+                INNER JOIN Usuario u ON d.idUsuario = u.idUsuario WHERE nombres ILIKE ?
+                OR apellidos ILIKE ? OR especialidad ILIKE ?";
             $stmt= $this->conn->prepare($sql);
             $parametro = "%".$texto."%";
             $stmt->execute(

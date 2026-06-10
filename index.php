@@ -1,3 +1,3 @@
 <?php
 
-header("Location: ../lpii/views/login/login.php");
+header("Location: views/login/login.php");

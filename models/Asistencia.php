@@ -140,10 +140,10 @@ class Asistencia {
                     INNER JOIN Estudiante e ON m.codigoEstudiante = e.codigoEstudiante
                     INNER JOIN Usuario u ON e.idUsuario = u.idUsuario
                     INNER JOIN Curso c ON m.idCurso = c.idCurso
-                    WHERE u.nombres LIKE :termino 
-                       OR u.apellidos LIKE :termino 
-                       OR c.nombre LIKE :termino
-                       OR a.estado LIKE :termino
+                    WHERE u.nombres ILIKE :termino
+                       OR u.apellidos ILIKE :termino
+                       OR c.nombre ILIKE :termino
+                       OR a.estado ILIKE :termino
                     ORDER BY a.fecha DESC";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':termino', $termino);

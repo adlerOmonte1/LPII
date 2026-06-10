@@ -3,7 +3,7 @@ require_once '../models/Docente.php';
 
 $action = $_REQUEST['action'] ?? ''; 
 $docente = new Docente();
-$redirect = "/LPII/views/login/bienvenida.php?mod=docente&action=listar";
+$redirect = "/views/login/bienvenida.php?mod=docente&action=listar";
 if($action=='crear'){
     $resultado = $docente->crear(
         $nombres = $_POST["nombres"],

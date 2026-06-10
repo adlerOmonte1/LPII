@@ -24,13 +24,13 @@ public function listar() {
                     i.nombre AS idioma,
                     a.nombre AS aula,
                     CONCAT(u.apellidos, ', ', u.nombres) AS docente,
-                    GROUP_CONCAT(
+                    string_agg(
                         CONCAT(
                             h.diaSemana, ' ',
-                            DATE_FORMAT(h.horaInicio, '%H:%i'),
+                            to_char(h.horaInicio, 'HH24:MI'),
                             ' - ',
-                            DATE_FORMAT(h.horaFin, '%H:%i')
-                        ) SEPARATOR ' / '
+                            to_char(h.horaFin, 'HH24:MI')
+                        ), ' / '
                     ) AS horario
                 FROM Curso c
                 INNER JOIN Nivel n ON c.idNivel = n.idNivel
@@ -114,7 +114,7 @@ public function matricular($idCurso, $codigoEstudiante)
         }
 
         $sql = "INSERT INTO Matricula (fechaMatricula, estado, idCurso, codigoEstudiante)
-                VALUES (CURDATE(), 'Activo', :idCurso, :codigoEstudiante)";
+                VALUES (CURRENT_DATE, 'Activo', :idCurso, :codigoEstudiante)";
 
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':idCurso', $idCurso);
@@ -191,13 +191,13 @@ public function obtenerPorId($idCurso) {
                     d.codigoDocente, 
                     u.nombres AS nombreDocente,
                     u.apellidos AS apellidoDocente,
-                    GROUP_CONCAT(
+                    string_agg(
                         CONCAT(
                             h.diaSemana, ' ',
-                            DATE_FORMAT(h.horaInicio, '%H:%i'),
+                            to_char(h.horaInicio, 'HH24:MI'),
                             ' - ',
-                            DATE_FORMAT(h.horaFin, '%H:%i')
-                        ) SEPARATOR ' / '
+                            to_char(h.horaFin, 'HH24:MI')
+                        ), ' / '
                     ) AS horario
                 FROM Curso c
                 INNER JOIN Nivel n ON c.idNivel = n.idNivel
@@ -362,13 +362,13 @@ public function obtenerDocentes() {
                     i.nombre AS idioma,
                     a.nombre AS aula,
                     CONCAT(u.apellidos, ', ', u.nombres) AS docente,
-                    GROUP_CONCAT(
+                    string_agg(
                         CONCAT(
                             h.diaSemana, ' ',
-                            DATE_FORMAT(h.horaInicio, '%H:%i'),
+                            to_char(h.horaInicio, 'HH24:MI'),
                             ' - ',
-                            DATE_FORMAT(h.horaFin, '%H:%i')
-                        ) SEPARATOR ' / '
+                            to_char(h.horaFin, 'HH24:MI')
+                        ), ' / '
                     ) AS horario
                 FROM Curso c
                 INNER JOIN Nivel n ON c.idNivel = n.idNivel
@@ -378,12 +378,12 @@ public function obtenerDocentes() {
                 INNER JOIN Usuario u ON d.idUsuario = u.idUsuario
                 LEFT JOIN CursoHorario ch ON ch.idCurso = c.idCurso
                 LEFT JOIN Horario h ON h.idHorario = ch.idHorario
-                WHERE c.nombre LIKE ? 
-                   OR n.nombre LIKE ? 
-                   OR i.nombre LIKE ? 
-                   OR a.nombre LIKE ? 
-                   OR u.nombres LIKE ? 
-                   OR u.apellidos LIKE ?
+                WHERE c.nombre ILIKE ?
+                   OR n.nombre ILIKE ?
+                   OR i.nombre ILIKE ?
+                   OR a.nombre ILIKE ?
+                   OR u.nombres ILIKE ?
+                   OR u.apellidos ILIKE ?
                 GROUP BY 
                     c.idCurso,
                     c.nombre,
