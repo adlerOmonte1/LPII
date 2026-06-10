@@ -134,7 +134,7 @@ if (isset($_GET['q']) && !empty($_GET['q'])) {
         </div>
 
         <div class="text-muted mt-2">
-            Total registros: <?php echo count($estudiantes); ?>
+            Total registros: <?php echo count($estudiantes ?? []); ?>
         </div>
 
     </div>

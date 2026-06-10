@@ -10,7 +10,7 @@ class Docente{
     }
     public function listar(){
         try{
-            $sql = "SELECT * FROM Docente do JOIN usuario us on us.idUsuario=do.idusuario"; 
+            $sql = "SELECT * FROM Docente doc JOIN Usuario us ON us.idUsuario = doc.idUsuario";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             return  $stmt->fetchAll(PDO::FETCH_OBJ); //CAMBIANDO DEL ASsoc para que de el buscador
@@ -18,6 +18,7 @@ class Docente{
 
         }catch(Exception $e){
             echo "Ocurrio un error con".$e->getMessage();
+            return [];
         }
     }
 
@@ -75,8 +76,8 @@ class Docente{
         }
     }
     public function obtenerPorId($idUsuario){
-        $sql = "SELECT us.idUsuario, nombres, apellidos, email, codigoDocente, especialidad FROM docente do JOIN
-        usuario us ON us.idUsuario=do.idUsuario where us.idUsuario=:idUsuario";
+        $sql = "SELECT us.idUsuario, nombres, apellidos, email, codigoDocente, especialidad FROM Docente doc JOIN
+        Usuario us ON us.idUsuario = doc.idUsuario WHERE us.idUsuario = :idUsuario";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':idUsuario',$idUsuario);
         $stmt->execute();
@@ -115,6 +116,7 @@ class Docente{
 
         }catch(Exception $e){
             echo "Ocurrio un error".$e->getMessage();
+            return [];
         }
     }
 

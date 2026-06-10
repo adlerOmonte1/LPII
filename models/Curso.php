@@ -262,8 +262,8 @@ public function obtenerAulas() {
 }
 
 public function obtenerCursosporIdDocente($idUsuario){
-    $sql = "SELECT idCurso, nombre, fechaInicio,fechaFin FROM curso cu JOIN docente do 
-    on do.codigoDocente=cu.codigoDocente  WHERE do.idusuario=:idusuario";
+    $sql = "SELECT idCurso, nombre, fechaInicio, fechaFin FROM Curso cu JOIN Docente doc
+    ON doc.codigoDocente = cu.codigoDocente WHERE doc.idUsuario = :idusuario";
     $stmt = $this->conn->prepare($sql);
     $stmt->bindParam(':idusuario',$idUsuario);
     $stmt->execute();

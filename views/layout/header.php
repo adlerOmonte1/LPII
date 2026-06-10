@@ -20,9 +20,8 @@ if (!isset($_SESSION['email'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-    <style>
-        body { background: #f8f9fa; }
-    </style>
+    <!-- Tema visual unificado de la plataforma -->
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body>

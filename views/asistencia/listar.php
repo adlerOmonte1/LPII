@@ -106,7 +106,7 @@ if($busqueda != ""){
     </div>
 
     <div class="text-muted mt-2">
-        Total registros: <?= count($resultado); ?>
+        Total registros: <?= count($resultado ?? []); ?>
     </div>
 
 </div>

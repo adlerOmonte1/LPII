@@ -3,18 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro</title>
+    <title>Registro — Instituto de Idiomas</title>
 
-  
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Tema visual unificado -->
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body class="bg-light">
+<body>
 
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+<div class="auth-wrapper">
 
-    <div class="card shadow p-4" style="width: 450px;">
+    <div class="auth-card" style="max-width: 460px;">
 
-        <h3 class="text-center mb-4">Registro de Usuario</h3>
+        <div class="auth-icon"><i class="bi bi-person-plus-fill"></i></div>
+        <h3 class="text-center mb-1">Crear cuenta</h3>
+        <p class="text-center text-muted mb-4">Regístrate para acceder a la plataforma</p>
 
         <form action="../../controllers/registroProcess.php" method="POST">
 
@@ -46,12 +50,15 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-success w-100">Registrar</button>
+            <button type="submit" class="btn btn-success w-100 mt-2">
+                <i class="bi bi-check2-circle me-1"></i> Registrar
+            </button>
 
         </form>
 
-        <div class="text-center mt-3">
-            <a href="login.php" class="text-decoration-none">Volver al login</a>
+        <div class="text-center mt-4">
+            <span class="text-muted">¿Ya tienes cuenta?</span>
+            <a href="login.php" class="fw-semibold">Inicia sesión</a>
         </div>
 
     </div>
