@@ -65,6 +65,17 @@ class CamelCaseStatement extends PDOStatement
         }
         return $filas;
     }
+
+    /**
+     * Cuando una vista recorre el statement directamente
+     * (foreach ($stmt as $fila)), PDO usa un iterador interno en C que NO
+     * pasa por fetch(). Sobrescribimos getIterator() para que ese recorrido
+     * también obtenga las claves remapeadas en camelCase.
+     */
+    public function getIterator(): Iterator
+    {
+        return new ArrayIterator($this->fetchAll());
+    }
 }
 
 /**

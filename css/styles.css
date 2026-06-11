@@ -1,5 +1,5 @@
 /* ============================================================
-   Sistema de Gestión de Matrícula — Tema visual unificado
+   Sistema de Gestión de Matrícula — Tema visual unificado (Azul)
    ------------------------------------------------------------
    Re-estiliza los componentes de Bootstrap para dar una
    apariencia moderna y coherente a toda la plataforma.
@@ -9,17 +9,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-    --brand-1: #4f46e5;   /* indigo  */
-    --brand-2: #7c3aed;   /* violeta */
-    --brand-3: #0ea5e9;   /* celeste */
+    --brand-1: #1a56db;   /* Azul fuerte principal */
+    --brand-2: #3f83f8;   /* Azul medio/claro */
+    --brand-3: #60a5fa;   /* Azul muy claro / celeste */
     --ink:     #1e2235;
     --muted:   #6b7280;
-    --bg-1:    #eef2ff;
-    --bg-2:    #f5f3ff;
+    --bg-1:    #eff6ff;   /* Fondo azul extra suave */
+    --bg-2:    #dbeafe;   /* Fondo azul suave */
     --card-radius: 18px;
     --shadow-sm: 0 2px 8px rgba(31, 41, 55, .06);
-    --shadow-md: 0 10px 30px rgba(79, 70, 229, .12);
-    --shadow-lg: 0 18px 45px rgba(79, 70, 229, .22);
+    --shadow-md: 0 10px 30px rgba(26, 86, 219, .12);
+    --shadow-lg: 0 18px 45px rgba(26, 86, 219, .22);
 }
 
 /* ---------- Base ---------- */
@@ -65,7 +65,7 @@ a { text-decoration: none; }
 }
 .navbar .btn-outline-danger:hover {
     background: #fff;
-    color: var(--brand-2);
+    color: var(--brand-1);
     border-color: #fff;
 }
 
@@ -123,9 +123,9 @@ a { text-decoration: none; }
 .table thead th:first-child { border-top-left-radius: 12px; }
 .table thead th:last-child  { border-top-right-radius: 12px; }
 .table.table-bordered, .table.table-bordered > * { border: 0 !important; }
-.table-striped > tbody > tr:nth-of-type(odd) > * { background-color: #f8f9ff; }
+.table-striped > tbody > tr:nth-of-type(odd) > * { background-color: #f8fafc; }
 .table tbody tr { transition: background-color .15s ease; }
-.table tbody tr:hover > * { background-color: #eef2ff !important; }
+.table tbody tr:hover > * { background-color: #e1effe !important; }
 .table td, .table th { vertical-align: middle; }
 
 /* ---------- Botones ---------- */
@@ -141,7 +141,7 @@ a { text-decoration: none; }
 .btn-primary {
     background: linear-gradient(90deg, var(--brand-1), var(--brand-2));
     border: none;
-    box-shadow: 0 6px 16px rgba(79, 70, 229, .28);
+    box-shadow: 0 6px 16px rgba(26, 86, 219, .28);
 }
 .btn-primary:hover, .btn-primary:focus { filter: brightness(1.07); background: linear-gradient(90deg, var(--brand-1), var(--brand-2)); }
 
@@ -163,7 +163,7 @@ a { text-decoration: none; }
 }
 .form-control:focus, .form-select:focus {
     border-color: var(--brand-1);
-    box-shadow: 0 0 0 .2rem rgba(79, 70, 229, .15);
+    box-shadow: 0 0 0 .2rem rgba(26, 86, 219, .15);
 }
 .form-label { font-weight: 500; color: #374151; }
 
@@ -203,4 +203,50 @@ a { text-decoration: none; }
 .container { max-width: 1140px; }
 .shadow-soft { box-shadow: var(--shadow-sm) !important; }
 ::-webkit-scrollbar { height: 10px; width: 10px; }
-::-webkit-scrollbar-thumb { background: #c7cdf5; border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: #93c5fd; border-radius: 10px; }
+
+/* ============================================================
+   RESPONSIVE — ajustes para tablet y móvil
+   ============================================================ */
+
+/* Tablets y pantallas medianas (<= 992px) */
+@media (max-width: 992px) {
+    .container { padding-left: 16px; padding-right: 16px; }
+    .title-box { font-size: 1.4rem; padding: 8px 18px; }
+
+    /* Barras de búsqueda: que no se desborden, se apilen si hace falta */
+    form.d-flex {
+        flex-wrap: wrap;
+        gap: .5rem;
+        justify-content: flex-start !important;
+    }
+    form.d-flex .form-control { max-width: 100% !important; }
+    form.d-flex .me-2 { margin-right: 0 !important; }
+}
+
+/* Móviles (<= 576px) */
+@media (max-width: 576px) {
+    body { font-size: .95rem; }
+    .container { margin-top: 1.5rem !important; }
+
+    .title-box { font-size: 1.2rem; padding: 7px 14px; }
+
+    /* Tablas más compactas (siguen con scroll horizontal por .table-responsive) */
+    .table > :not(caption) > * > * { padding: .55rem .6rem; }
+    .table { font-size: .85rem; }
+
+    /* Botones de acción dentro de las tablas: que se apilen con espacio */
+    td .btn, td .btn-sm { display: inline-block; margin: 2px 0; }
+
+    /* Inputs y botones a ancho completo en formularios apilados */
+    form.d-flex .btn { width: 100%; }
+
+    /* Tarjetas de login/registro ocupan casi todo el ancho */
+    .auth-card { padding: 1.6rem 1.3rem; border-radius: 18px; }
+
+    /* Navbar: el nombre de usuario y botón salen mejor apilados */
+    .navbar .d-flex { flex-direction: column; align-items: flex-start !important; gap: .4rem; }
+}
+
+/* La imagen/tabla nunca rompe el layout horizontal */
+img, table { max-width: 100%; }

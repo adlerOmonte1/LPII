@@ -20,7 +20,7 @@
         <h3 class="text-center mb-1">Crear cuenta</h3>
         <p class="text-center text-muted mb-4">Regístrate para acceder a la plataforma</p>
 
-        <form action="../../controllers/registroProcess.php" method="POST">
+        <form action="../controllers/RegistroProcess.php" method="POST">
 
             <div class="mb-3">
                 <label class="form-label">Nombres</label>
